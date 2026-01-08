@@ -3,7 +3,14 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { useModal } from "@/context/ModalContext";
 
-export default function Hero() {
+// 1. Add this interface to tell TypeScript what props to expect
+interface EventsHeroProps {
+  title: string;
+  subtitle: string;
+}
+
+// 2. Update the function to accept { title, subtitle }
+export default function EventsHero({ title, subtitle }: EventsHeroProps) {
   const { openModal } = useModal();
 
   return (
@@ -15,11 +22,6 @@ export default function Hero() {
           src="/events-hero.png" 
           alt="HERdacity Events"
           fill
-          /**
-           * MOBILE: Scale 1.15 and focus on 80% down (people)
-           * TABLET (sm): Scale 100 (No zoom) and object-center to ensure the full group width is visible
-           * DESKTOP (md/lg): Slight 105 zoom for cinematic feel
-           */
           className="object-cover transition-transform duration-1000 ease-out 
                      scale-[1.15] sm:scale-100 md:scale-105 
                      object-[50%_80%] sm:object-center"
@@ -47,25 +49,24 @@ export default function Hero() {
             </span>
           </div>
 
-          {/* Headline */}
+          {/* Headline - Updated to use the 'title' prop */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-6 leading-[1.1] tracking-tight">
-            The Room Where <br className="md:hidden" /><br />
-            <span className="italic font-serif text-brand-pink">It Happens.</span>
+            {title}
           </h1>
 
-          {/* Subtext */}
+          {/* Subtext - Updated to use the 'subtitle' prop */}
           <p className="text-base md:text-xl lg:text-2xl text-white/90 font-light max-w-sm md:max-w-2xl mx-auto mb-10 leading-relaxed">
-            Networking that doesn't feel like work. Join us for fireside chats, workshops, and our signature hangouts.
+            {subtitle}
           </p>
 
           {/* Action Button */}
           <div className="px-4 sm:px-0">
             <button 
-            onClick={openModal} // Changed from href to onClick
-            className="inline-block bg-brand-pink text-white px-10 py-4 md:px-12 md:py-5 rounded-full font-bold text-base md:text-lg hover:bg-white hover:text-brand-pink transition-all shadow-[0_0_50px_-10px_rgba(246,16,103,0.5)] transform hover:-translate-y-1"
-          >
-            Join the Network
-          </button>
+              onClick={openModal} 
+              className="inline-block bg-brand-pink text-white px-10 py-4 md:px-12 md:py-5 rounded-full font-bold text-base md:text-lg hover:bg-white hover:text-brand-pink transition-all shadow-[0_0_50px_-10px_rgba(246,16,103,0.5)] transform hover:-translate-y-1"
+            >
+              Join the Network
+            </button>
           </div>
         </motion.div>
       </div>
