@@ -8,7 +8,6 @@ interface JoinModalProps {
 }
 
 export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
-  // Updated state to hold all new fields
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -19,10 +18,12 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
     company: ""
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [errorMessage, setErrorMessage] = useState(""); // New state for error messages
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setStatus("loading");
+    setErrorMessage("");
 
     try {
       const res = await fetch("/api/subscribe", {
@@ -31,18 +32,21 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
         body: JSON.stringify(formData),
       });
 
+      const data = await res.json();
+
       if (res.ok) {
         setStatus("success");
-        // Reset form
         setFormData({ 
           firstName: "", lastName: "", email: "", 
           phone: "", linkedin: "", jobTitle: "", company: "" 
         });
       } else {
         setStatus("error");
+        setErrorMessage(data.error || "Something went wrong. Please check your connection.");
       }
     } catch (error) {
       setStatus("error");
+      setErrorMessage("Unable to connect to the server.");
     }
   };
 
@@ -66,7 +70,6 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            // Added max-height and overflow for scrolling on smaller screens
             className="relative bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto p-8 rounded-3xl shadow-2xl z-10"
           >
             <button 
@@ -97,7 +100,7 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
-                  {/* Name Fields - 2 Columns */}
+                  {/* Name Fields */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-1">First Name *</label>
@@ -125,7 +128,7 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
                     </div>
                   </div>
                   
-                  {/* Contact Fields - 2 Columns on MD screens */}
+                  {/* Contact Fields */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-1">Email *</label>
@@ -166,7 +169,7 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
                     />
                   </div>
 
-                  {/* Professional Fields - 2 Columns */}
+                  {/* Professional Fields */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-1">Job Title</label>
@@ -191,6 +194,13 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
                       />
                     </div>
                   </div>
+
+                  {/* Error Message Display */}
+                  {status === "error" && (
+                    <div className="bg-red-50 text-red-500 text-xs p-3 rounded-lg text-center">
+                      {errorMessage}
+                    </div>
+                  )}
 
                   <button 
                     type="submit"
