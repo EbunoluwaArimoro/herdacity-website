@@ -8,37 +8,37 @@ import Image from "next/image";
 const voices = [
   {
     name: "Alice Arimoro",
-    image: "alice.png",
+    image: "alice.jpg",
     story: "After joining HERdacity, what changed for me was the sense of grounding and clarity I felt in my personal and professional goals. What started as a space to build a personal brand on LinkedIn evolved into something much deeper and more meaningful.",
     role: "Member"
   },
   {
     name: "Christianah Arowolo",
-    image: "christianah.png",
+    image: "christianah.jpg",
     story: "Meeting real women, solving real problems and figuring it out completely changed my perspective about female focused communities. HERdacity has supported my growth through our weekly meet-ups which tackles unspoken challenges.",
     role: "Member"
   },
   {
     name: "Modupe Laosun",
-    image: "modupe.png",
+    image: "modupe.jpg",
     story: "I gained clarity and confidence after joining HERdacity. Being around women who are also building and figuring things out reminded me that I’m not alone and that my journey is valid.",
     role: "Member"
   },
   {
     name: "Mariam Yusuf",
-    image: "mariam.png",
+    image: "mariam.jpg",
     story: "HERdacity has been so impactful for me because it creates a space where my 'Ambitiousness' does not have to be masked or softened. It has been a community that has reminded me that I don’t have to figure everything out alone.",
     role: "Member"
   },
   {
     name: "Viola Echere",
-    image: "viola.png",
+    image: "viola.jpg",
     story: "HERdacity created that opportunity to meet women like me who are also on similar paths. Understanding that as a woman I am not alone in this journey of self growth and development. HERdacity to me means sisterhood, family, and girlpower.",
     role: "Member"
   },
   {
     name: "Feyisiyunmi Akinyeye",
-    image: "feyi.png",
+    image: "feyi.jpg",
     story: "After joining HERdacity, I learned the power of showing up. How consistency actually works, how results compound over time, and how team bonding plays a huge role in growth.",
     role: "Member"
   }
