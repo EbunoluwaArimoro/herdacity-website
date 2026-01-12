@@ -2,14 +2,14 @@
 import { motion } from "framer-motion";
 import Image from "next/image";
 import { useModal } from "@/context/ModalContext";
+import React from "react";
 
-// 1. Add this interface to tell TypeScript what props to expect
+// Updated interface to accept ReactNode (allows bold/italic/colors)
 interface EventsHeroProps {
-  title: string;
+  title: React.ReactNode; 
   subtitle: string;
 }
 
-// 2. Update the function to accept { title, subtitle }
 export default function EventsHero({ title, subtitle }: EventsHeroProps) {
   const { openModal } = useModal();
 
@@ -49,12 +49,12 @@ export default function EventsHero({ title, subtitle }: EventsHeroProps) {
             </span>
           </div>
 
-          {/* Headline - Updated to use the 'title' prop */}
+          {/* Headline - Now renders rich text */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-6 leading-[1.1] tracking-tight">
             {title}
           </h1>
 
-          {/* Subtext - Updated to use the 'subtitle' prop */}
+          {/* Subtext */}
           <p className="text-base md:text-xl lg:text-2xl text-white/90 font-light max-w-sm md:max-w-2xl mx-auto mb-10 leading-relaxed">
             {subtitle}
           </p>

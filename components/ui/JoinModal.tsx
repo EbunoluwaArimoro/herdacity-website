@@ -8,7 +8,16 @@ interface JoinModalProps {
 }
 
 export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
-  const [formData, setFormData] = useState({ firstName: "", lastName: "", email: "" });
+  // Updated state to hold all new fields
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    linkedin: "",
+    jobTitle: "",
+    company: ""
+  });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -24,13 +33,21 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
 
       if (res.ok) {
         setStatus("success");
-        setFormData({ firstName: "", lastName: "", email: "" });
+        // Reset form
+        setFormData({ 
+          firstName: "", lastName: "", email: "", 
+          phone: "", linkedin: "", jobTitle: "", company: "" 
+        });
       } else {
         setStatus("error");
       }
     } catch (error) {
       setStatus("error");
     }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   return (
@@ -49,11 +66,12 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
             initial={{ scale: 0.95, opacity: 0, y: 20 }}
             animate={{ scale: 1, opacity: 1, y: 0 }}
             exit={{ scale: 0.95, opacity: 0, y: 20 }}
-            className="relative bg-white w-full max-w-md p-8 rounded-3xl shadow-2xl overflow-hidden z-10"
+            // Added max-height and overflow for scrolling on smaller screens
+            className="relative bg-white w-full max-w-lg max-h-[90vh] overflow-y-auto p-8 rounded-3xl shadow-2xl z-10"
           >
             <button 
               onClick={onClose}
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-brand-pink hover:text-white transition-colors font-bold"
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-full bg-gray-100 text-gray-500 hover:bg-brand-pink hover:text-white transition-colors font-bold z-20"
             >
               ✕
             </button>
@@ -69,52 +87,109 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
               </div>
             ) : (
               <>
-                <div className="text-center mb-8">
-                  {/* Removed "The Community" label */}
+                <div className="text-center mb-6">
                   <h3 className="text-2xl font-display font-bold text-brand-charcoal mt-2 mb-2">
                     Join HERdacity
                   </h3>
                   <p className="text-brand-charcoal/60 text-sm leading-relaxed">
-                    Access masterclasses, accountability, and a network of ambitious women.
+                    Join our network of ambitious women building the future.
                   </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
+                  {/* Name Fields - 2 Columns */}
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-2">First Name</label>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-1">First Name *</label>
                       <input 
+                        name="firstName"
                         type="text"
                         required
                         value={formData.firstName}
-                        onChange={(e) => setFormData({...formData, firstName: e.target.value})}
+                        onChange={handleChange}
                         className="w-full bg-brand-off-white border border-brand-charcoal/10 rounded-xl px-4 py-3 text-brand-charcoal focus:outline-none focus:border-brand-pink transition-colors text-sm"
                         placeholder="Jane"
                       />
                     </div>
                     <div>
-                      <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-2">Last Name</label>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-1">Last Name *</label>
                       <input 
+                        name="lastName"
                         type="text"
                         required
                         value={formData.lastName}
-                        onChange={(e) => setFormData({...formData, lastName: e.target.value})}
+                        onChange={handleChange}
                         className="w-full bg-brand-off-white border border-brand-charcoal/10 rounded-xl px-4 py-3 text-brand-charcoal focus:outline-none focus:border-brand-pink transition-colors text-sm"
                         placeholder="Doe"
                       />
                     </div>
                   </div>
                   
+                  {/* Contact Fields - 2 Columns on MD screens */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-1">Email *</label>
+                      <input 
+                        name="email"
+                        type="email"
+                        required
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full bg-brand-off-white border border-brand-charcoal/10 rounded-xl px-4 py-3 text-brand-charcoal focus:outline-none focus:border-brand-pink transition-colors text-sm"
+                        placeholder="jane@example.com"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-1">Phone *</label>
+                      <input 
+                        name="phone"
+                        type="tel"
+                        required
+                        value={formData.phone}
+                        onChange={handleChange}
+                        className="w-full bg-brand-off-white border border-brand-charcoal/10 rounded-xl px-4 py-3 text-brand-charcoal focus:outline-none focus:border-brand-pink transition-colors text-sm"
+                        placeholder="+234..."
+                      />
+                    </div>
+                  </div>
+
+                  {/* LinkedIn */}
                   <div>
-                    <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-2">Email Address</label>
+                    <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-1">LinkedIn URL</label>
                     <input 
-                      type="email"
-                      required
-                      value={formData.email}
-                      onChange={(e) => setFormData({...formData, email: e.target.value})}
+                      name="linkedin"
+                      type="url"
+                      value={formData.linkedin}
+                      onChange={handleChange}
                       className="w-full bg-brand-off-white border border-brand-charcoal/10 rounded-xl px-4 py-3 text-brand-charcoal focus:outline-none focus:border-brand-pink transition-colors text-sm"
-                      placeholder="jane@example.com"
+                      placeholder="https://linkedin.com/in/..."
                     />
+                  </div>
+
+                  {/* Professional Fields - 2 Columns */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-1">Job Title</label>
+                      <input 
+                        name="jobTitle"
+                        type="text"
+                        value={formData.jobTitle}
+                        onChange={handleChange}
+                        className="w-full bg-brand-off-white border border-brand-charcoal/10 rounded-xl px-4 py-3 text-brand-charcoal focus:outline-none focus:border-brand-pink transition-colors text-sm"
+                        placeholder="Product Manager"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-xs font-bold uppercase tracking-wider text-brand-charcoal/50 mb-1">Company</label>
+                      <input 
+                        name="company"
+                        type="text"
+                        value={formData.company}
+                        onChange={handleChange}
+                        className="w-full bg-brand-off-white border border-brand-charcoal/10 rounded-xl px-4 py-3 text-brand-charcoal focus:outline-none focus:border-brand-pink transition-colors text-sm"
+                        placeholder="Tech Corp"
+                      />
+                    </div>
                   </div>
 
                   <button 
@@ -122,7 +197,6 @@ export default function JoinModal({ isOpen, onClose }: JoinModalProps) {
                     disabled={status === "loading"}
                     className="w-full bg-brand-pink text-white font-bold py-4 rounded-xl hover:bg-[#d60e59] transition-all shadow-lg shadow-brand-pink/20 disabled:opacity-50 disabled:cursor-not-allowed mt-4 text-sm uppercase tracking-wide"
                   >
-                    {/* Changed Text */}
                     {status === "loading" ? "Joining..." : "Join the Network"}
                   </button>
                 </form>

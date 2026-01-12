@@ -49,8 +49,8 @@ export default function Hero() {
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-display font-bold text-white mb-6 leading-[1.1] tracking-tight">
-            The Room Where <br className="md:hidden" /><br />
-            <span className="italic font-serif text-brand-pink">It Happens.</span>
+            Voices <br className="md:hidden" /><br />
+            <span className="italic font-serif text-brand-pink">In The Room</span>
           </h1>
 
           {/* Subtext */}

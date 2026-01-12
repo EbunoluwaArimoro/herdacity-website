@@ -36,7 +36,7 @@ export default function VisualManifesto() {
             </h3>
           </div>
           <h2 className="text-4xl md:text-6xl font-display font-bold text-brand-charcoal leading-[1.1]">
-           Stories in <br />
+           Stories in <br className="md:hidden" />
             <span className="text-brand-pink italic font-serif">Frames</span>
           </h2>
         </div>

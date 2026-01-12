@@ -7,19 +7,23 @@ import Footer from "@/components/layout/Footer";
 export default function EventsPage() {
   return (
     <main className="min-h-screen bg-white">
-      {/* 1. YOUR EXISTING HERO */}
+      {/* 1. HERO with Styling applied to "Experiences" */}
       <EventsHero 
-        title="Events & Experiences"
+        title={
+          <>
+            Events & <span className="text-brand-pink font-serif italic">Experiences</span>
+          </>
+        }
         subtitle="Designed for the woman who is ready to build."
       />
       
-      {/* 2. THE HIGH-END MASONRY GALLERY */}
+      {/* 2. GALLERY */}
       <VisualManifesto />
 
-      {/* 3. THE VERTICAL AGENDA LIST */}
+      {/* 3. AGENDA */}
       <EventAgenda />
 
-      {/* 4. FINAL CALL TO ACTION */}
+      {/* 4. CTA & FOOTER */}
       <CTA />
       <Footer />
     </main>
