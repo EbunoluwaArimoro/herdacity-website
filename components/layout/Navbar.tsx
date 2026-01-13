@@ -42,7 +42,7 @@ export default function Navbar() {
                 className="object-contain"
               />
             </div>
-            <span className={`font-display font-bold text-xl tracking-tight leading-none ${
+            <span className={`-ml-1.5 font-display font-bold text-xl tracking-tight leading-none ${
               scrolled || mobileMenuOpen ? "text-brand-charcoal" : "text-white"
             }`}>
               HERdacity

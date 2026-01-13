@@ -37,8 +37,7 @@ export default function Footer() {
           <div className="max-w-md">
             <h2 className="font-display font-bold text-3xl mb-4 tracking-tight">HERdacity</h2>
             <p className="text-white/60 leading-relaxed text-sm font-light">
-              The community for women ready to lead in tech and beyond. <br/>
-              We turn visibility into opportunity.
+              The community for women ready to lead. <br/>
             </p>
           </div>
           
