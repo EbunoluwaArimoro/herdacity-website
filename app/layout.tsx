@@ -1,13 +1,38 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
-// Import the Provider
 import { ModalProvider } from "@/context/ModalContext"; 
 
 export const metadata: Metadata = {
   title: "HERdacity | A Sisterhood for Women Who Dare",
   description: "A leadership ecosystem and professional growth community for ambitious women.",
   icons: { icon: "/icon-white.png" },
+  
+  // 1. Social Media Sharing (Open Graph)
+  openGraph: {
+    title: "HERdacity | A Sisterhood for Women Who Dare",
+    description: "A leadership ecosystem and professional growth community for ambitious women.",
+    url: "https://herdacity.com",
+    siteName: "HERdacity",
+    images: [
+      {
+        url: "/logo-pink.png", // This is the image you asked for
+        width: 1200,
+        height: 630,
+        alt: "HERdacity Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  // 2. Twitter Card (for Twitter/X specific sharing)
+  twitter: {
+    card: "summary_large_image",
+    title: "HERdacity | A Sisterhood for Women Who Dare",
+    description: "A leadership ecosystem and professional growth community for ambitious women.",
+    images: ["/logo-pink.png"],
+  },
 };
 
 export default function RootLayout({
@@ -26,7 +51,6 @@ export default function RootLayout({
         />
       </head>
       <body className="antialiased selection:bg-brand-pink selection:text-white">
-        {/* Wrap everything in ModalProvider */}
         <ModalProvider>
           <Navbar />
           <main>{children}</main>
