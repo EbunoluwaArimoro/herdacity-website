@@ -1,5 +1,6 @@
 "use client"; // Required for state
 import Link from "next/link";
+import Image from "next/image"; // Added Image import
 import { useState } from "react";
 
 export default function Footer() {
@@ -35,9 +36,21 @@ export default function Footer() {
         {/* Top Section */}
         <div className="flex flex-col lg:flex-row justify-between items-start gap-12 mb-20 border-b border-white/10 pb-12">
           <div className="max-w-md">
-            <h2 className="font-display font-bold text-3xl mb-4 tracking-tight">HERdacity</h2>
+            {/* Logo Section with Icon */}
+            <div className="flex items-center gap-3 mb-4">
+              <div className="relative w-8 h-8">
+                <Image 
+                  src="/icon-white.png" 
+                  alt="HERdacity Icon" 
+                  fill
+                  className="object-contain"
+                />
+              </div>
+              <h2 className="-ml-2 font-display font-bold text-3xl tracking-tight">HERdacity</h2>
+            </div>
+            
             <p className="text-white/60 leading-relaxed text-sm font-light">
-              The community for women ready to lead. <br/>
+              A sisterhood for women who dare. <br/>
             </p>
           </div>
           
@@ -46,11 +59,15 @@ export default function Footer() {
             <p className="text-xs font-bold uppercase tracking-widest mb-4 text-white">Join the Newsletter</p>
             
             {status === "success" ? (
-              <div className="bg-brand-pink/20 border border-brand-pink text-white px-6 py-3 rounded-lg text-sm">
+              <div className="bg-brand-pink/20 border border-brand-pink text-white px-6 py-3 rounded-[50px] text-sm">
                 🎉 You're on the list! Check your inbox.
               </div>
             ) : (
-              <form onSubmit={handleSubmit} className="flex gap-2">
+              // UPDATED FORM: Single Pill Design
+              <form 
+                onSubmit={handleSubmit} 
+                className="flex items-center bg-white/5 border border-white/10 rounded-[50px] p-1 focus-within:border-brand-pink transition-colors w-full md:w-[400px]"
+              >
                 <input 
                   type="email" 
                   placeholder="Enter your email" 
@@ -58,12 +75,14 @@ export default function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   disabled={status === "loading"}
-                  className="bg-white/5 border border-white/10 rounded-lg px-4 py-3 text-sm text-white focus:outline-none focus:border-brand-pink w-full md:w-64 transition-colors placeholder:text-white/20 disabled:opacity-50"
+                  // Input is now transparent and borderless to blend in
+                  className="bg-transparent border-none text-white text-sm px-5 py-2 w-full focus:outline-none placeholder:text-white/20 disabled:opacity-50"
                 />
                 <button 
                   type="submit" 
                   disabled={status === "loading"}
-                  className="bg-brand-pink text-white px-6 py-3 rounded-lg text-sm font-bold hover:bg-white hover:text-brand-charcoal transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  // Button sits inside the container
+                  className="bg-brand-pink text-white px-6 py-2.5 rounded-[50px] text-sm font-bold hover:bg-white hover:text-brand-charcoal transition-all disabled:opacity-50 disabled:cursor-not-allowed shrink-0"
                 >
                   {status === "loading" ? "..." : "Subscribe"}
                 </button>
@@ -123,7 +142,7 @@ export default function Footer() {
 
         {/* Copyright */}
         <div className="flex flex-col md:flex-row justify-between items-center text-white/30 text-xs">
-          <p>© 2026 The HERdacity Network. Built with audacity.</p>
+          <p>© 2026 The HERdacity Network.</p>
           <div className="flex gap-6 mt-4 md:mt-0">
             <Link href="/privacy" className="hover:text-white">Privacy Policy</Link>
             <Link href="/terms" className="hover:text-white">Terms of Service</Link>

@@ -1,5 +1,8 @@
+import Footer from "@/components/layout/Footer";
+
 export default function PrivacyPolicy() {
   return (
+    <>
     <section className="pt-40 pb-20 bg-brand-off-white min-h-screen">
       <div className="container mx-auto px-6 max-w-3xl">
         <h1 className="text-4xl font-display font-bold text-brand-charcoal mb-8">Privacy Policy</h1>
@@ -22,5 +25,8 @@ export default function PrivacyPolicy() {
         </div>
       </div>
     </section>
+
+    <Footer />
+  </>
   );
 }
