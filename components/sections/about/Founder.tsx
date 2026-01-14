@@ -13,7 +13,7 @@ export default function Founder() {
             initial={{ opacity: 0, x: -30 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
-            className="w-full max-w-md lg:w-[45%] relative aspect-[3/4] group cursor-default"
+            className="mt-7 w-full max-w-md lg:w-[45%] relative aspect-[3/4] group cursor-default"
           >
             {/* Main Image Container */}
             <div className="relative w-full h-full rounded-2xl overflow-hidden shadow-2xl transition-all duration-500 border-2 border-transparent group-hover:border-brand-pink">
@@ -57,13 +57,13 @@ export default function Founder() {
                 </p>
               </div>
 
-              <p className="pb-24">
+              <p>
                 I created this space so women can build confidence, clarity, and consistency together—without pressure to perform, but with accountability to grow. This community is not about becoming someone else. It’s about becoming more of who you already are and being seen for it.
               </p>
             </div>
 
             {/* Signature Block - Increased Spacing (mt-20) & Black Text */}
-            <div className="mt-20">
+            <div>
               <p className="font-display font-bold text-2xl text-brand-charcoal">
                 <br />
                 Ebunoluwa Arimoro
