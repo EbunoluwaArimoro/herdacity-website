@@ -61,7 +61,8 @@ export default function Pathways() {
                   src={item.image}
                   alt={item.title}
                   fill
-                  className="object-cover group-hover:scale-105 transition-transform duration-700"
+                  // CHECK: If index is 2 (3rd card), keep it centered. Otherwise, align to top.
+                  className={`object-cover group-hover:scale-105 transition-transform duration-700 ${i === 2 ? 'object-center' : 'object-top'}`}
                 />
                 <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors" />
               </div>

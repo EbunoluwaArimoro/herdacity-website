@@ -55,7 +55,7 @@ export default function Hero() {
 
           {/* Subtext */}
           <p className="text-base md:text-xl lg:text-2xl text-white/90 font-light max-w-sm md:max-w-2xl mx-auto mb-10 leading-relaxed">
-            A community where you build visibility, confidence, and your career together.
+            A community where you build visibility, confidence, and your career, together.
           </p>
 
           {/* Action Button */}
