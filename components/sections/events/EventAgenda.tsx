@@ -36,8 +36,8 @@ const allEvents = [
   },
   {
     id: "mar-2026",
-    sortDate: "2026-03-08",
-    displayDate: "Mar 08",
+    sortDate: "2026-03-18",
+    displayDate: "Mar 18",
     title: "Show Up Audaciously",
     category: "Workshop",
     description: "Leveraging #GiveToGain to build a personal brand that serves and sells.",
@@ -48,8 +48,8 @@ const allEvents = [
   // --- Q2: The Acceleration ---
   {
     id: "apr-2026",
-    sortDate: "2026-04-04",
-    displayDate: "Apr 04",
+    sortDate: "2026-04-15",
+    displayDate: "Apr 15",
     title: "AI for the Rest of Us",
     category: "Workshop",
     description: "5 No-Code Tools to Automate Your Career Growth.",
@@ -58,8 +58,8 @@ const allEvents = [
   },
   {
     id: "may-2026",
-    sortDate: "2026-05-01",
-    displayDate: "May 01",
+    sortDate: "2026-05-20",
+    displayDate: "May 20",
     title: "The Burnout Breakthrough",
     category: "Wellness",
     description: "High Performance Without the Crash.",
@@ -68,8 +68,8 @@ const allEvents = [
   },
   {
     id: "jun-2026",
-    sortDate: "2026-06-23",
-    displayDate: "Jun 23",
+    sortDate: "2026-06-17",
+    displayDate: "Jun 17",
     title: "The Art of the Pivot",
     category: "Masterclass",
     description: "How to Transfer Your Skills into a High-Growth Industry.",
@@ -90,8 +90,8 @@ const allEvents = [
   },
   {
     id: "aug-2026",
-    sortDate: "2026-08-26",
-    displayDate: "Aug 26",
+    sortDate: "2026-08-19",
+    displayDate: "Aug 19",
     title: "Office Politics 101",
     category: "Strategy",
     description: "Navigating Bias and Advocating for Yourself and Others.",
@@ -100,8 +100,8 @@ const allEvents = [
   },
   {
     id: "sep-2026",
-    sortDate: "2026-09-30",
-    displayDate: "Sep 30",
+    sortDate: "2026-09-16",
+    displayDate: "Sep 16",
     title: "From Employee to Thought Leader",
     category: "Workshop",
     description: "Launching Your Industry Newsletter/Podcast.",
@@ -112,8 +112,8 @@ const allEvents = [
   // --- Q4: The Harvest ---
   {
     id: "oct-2026",
-    sortDate: "2026-10-11",
-    displayDate: "Oct 11",
+    sortDate: "2026-10-21",
+    displayDate: "Oct 21",
     title: "Protect Your Brand",
     category: "Strategy",
     description: "Digital Hygiene and Crisis Management for Leaders.",
@@ -122,8 +122,8 @@ const allEvents = [
   },
   {
     id: "nov-2026",
-    sortDate: "2026-11-19",
-    displayDate: "Nov 19",
+    sortDate: "2026-11-18",
+    displayDate: "Nov 18",
     title: "The CEO Mindset",
     category: "Masterclass",
     description: "How to Run Your Career Like a Business.",
