@@ -7,9 +7,21 @@ import Link from "next/link";
 const isEventPast = (dateString: string) => {
   const eventDate = new Date(dateString);
   const today = new Date();
-  // Reset time to ensure we compare only dates (ignores time of day)
   today.setHours(0, 0, 0, 0);
   return eventDate < today;
+};
+
+// Helper to intelligently tag events based on their title and description
+const deriveCategory = (title: string, description: string) => {
+  const content = `${title} ${description}`.toLowerCase();
+  
+  if (content.includes("becoming her") || content.includes("unveiling") || content.includes("flagship")) return "Flagship";
+  if (content.includes("masterclass") || content.includes("c-suite") || content.includes("mindset") || content.includes("art of")) return "Masterclass";
+  if (content.includes("networking") || content.includes("alliances") || content.includes("connection")) return "Networking";
+  if (content.includes("burnout") || content.includes("wellness") || content.includes("health")) return "Wellness";
+  if (content.includes("politics") || content.includes("strategy") || content.includes("brand") || content.includes("price") || content.includes("negotiation")) return "Strategy";
+  
+  return "Workshop"; // Default fallback
 };
 
 const allEvents = [
@@ -19,7 +31,6 @@ const allEvents = [
     sortDate: "2026-01-28", 
     displayDate: "Jan 28",
     title: "Price Your Genius",
-    category: "Workshop",
     description: "The Audacious Guide to Salary Negotiation & Side Hustle Scalability.",
     status: "Open",
     link: "https://luma.com/qdgrouzm" 
@@ -29,7 +40,6 @@ const allEvents = [
     sortDate: "2026-02-11",
     displayDate: "Feb 11",
     title: "Networking is a Love Language",
-    category: "Masterclass",
     description: "Building Strategic Alliances in Tech & Beyond.",
     status: "Open",
     link: "https://luma.com/moiykgcg"
@@ -39,7 +49,6 @@ const allEvents = [
     sortDate: "2026-03-18",
     displayDate: "Mar 18",
     title: "Show Up Audaciously",
-    category: "Workshop",
     description: "Leveraging #GiveToGain to build a personal brand that serves and sells.",
     status: "Open",
     link: "https://luma.com/4lczxmsj"
@@ -51,7 +60,6 @@ const allEvents = [
     sortDate: "2026-04-15",
     displayDate: "Apr 15",
     title: "AI for the Rest of Us",
-    category: "Workshop",
     description: "5 No-Code Tools to Automate Your Career Growth.",
     status: "Open",
     link: "https://luma.com/jp4683ds"
@@ -61,7 +69,6 @@ const allEvents = [
     sortDate: "2026-05-20",
     displayDate: "May 20",
     title: "The Burnout Breakthrough",
-    category: "Wellness",
     description: "High Performance Without the Crash.",
     status: "Open",
     link: "https://luma.com/ehe9ydqa"
@@ -71,7 +78,6 @@ const allEvents = [
     sortDate: "2026-06-17",
     displayDate: "Jun 17",
     title: "The Art of the Pivot",
-    category: "Masterclass",
     description: "How to Transfer Your Skills into a High-Growth Industry.",
     status: "Open",
     link: "https://luma.com/91z7fzex"
@@ -83,7 +89,6 @@ const allEvents = [
     sortDate: "2026-07-15",
     displayDate: "Jul 15",
     title: "Speak Like a C-Suite Exec",
-    category: "Workshop",
     description: "Mastering Persuasion in Boardrooms.",
     status: "Open",
     link: "https://luma.com/oh9n2ejk"
@@ -93,7 +98,6 @@ const allEvents = [
     sortDate: "2026-08-19",
     displayDate: "Aug 19",
     title: "Office Politics 101",
-    category: "Strategy",
     description: "Navigating Bias and Advocating for Yourself and Others.",
     status: "Open",
     link: "https://luma.com/vjeu31ma"
@@ -103,7 +107,6 @@ const allEvents = [
     sortDate: "2026-09-16",
     displayDate: "Sep 16",
     title: "From Employee to Thought Leader",
-    category: "Workshop",
     description: "Launching Your Industry Newsletter/Podcast.",
     status: "Open",
     link: "https://luma.com/ay6m960j"
@@ -115,7 +118,6 @@ const allEvents = [
     sortDate: "2026-10-21",
     displayDate: "Oct 21",
     title: "Protect Your Brand",
-    category: "Strategy",
     description: "Digital Hygiene and Crisis Management for Leaders.",
     status: "Open",
     link: "https://luma.com/qtusrz55"
@@ -125,7 +127,6 @@ const allEvents = [
     sortDate: "2026-11-18",
     displayDate: "Nov 18",
     title: "The CEO Mindset",
-    category: "Masterclass",
     description: "How to Run Your Career Like a Business.",
     status: "Open",
     link: "https://luma.com/xzklxmsj"
@@ -135,7 +136,6 @@ const allEvents = [
     sortDate: "2026-12-12",
     displayDate: "Dec 12",
     title: "Becoming Her 26",
-    category: "Flagship",
     description: "The Unveiling: Celebrating the Woman You Evolved Into.",
     status: "Waitlist",
     link: "https://luma.com/o4t8x60x"
@@ -144,9 +144,14 @@ const allEvents = [
 
 export default function EventAgenda() {
   // 1. Filter out past events
-  // 2. Slice to take only the first 3
+  // 2. Automatically derive the category based on content
+  // 3. Slice to take only the first 3
   const upcomingEvents = allEvents
     .filter(event => !isEventPast(event.sortDate))
+    .map(event => ({
+      ...event,
+      category: deriveCategory(event.title, event.description)
+    }))
     .slice(0, 3);
 
   return (
@@ -202,9 +207,6 @@ export default function EventAgenda() {
                         </button>
                       </Link>
                     ) : (
-                      // If status is NOT Open (e.g. Waitlist), button is disabled but we still wrap it in Link if you want them to sign up for waitlist.
-                      // If you want "Waitlist" events to be clickable, use the Link wrapper. 
-                      // Below is the clickable version for Waitlist too:
                       <Link 
                         href={event.link} 
                         target="_blank" 
