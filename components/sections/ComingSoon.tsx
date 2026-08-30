@@ -10,15 +10,15 @@ interface ComingSoonProps {
 }
 
 export default function ComingSoon({
-  label = "Not quite yet",
-  title = "This one is still being built.",
-  message = "We are putting it together properly rather than putting it up quickly. In the meantime, here is what is already open to you.",
+  label = "In the works",
+  title = "We are building something bold.",
+  message = "The feature you are looking for is currently in the lab. We are crafting it to meet the exact needs of the women in our network. While we put on the finishing touches, explore the tools and spaces already waiting for you.",
 }: ComingSoonProps) {
   const links = [
-    { href: "/resources/post-builder", text: "The Post Builder", note: "Turn what happened into a post" },
-    { href: "/programs", text: "Programs", note: "How we work with women" },
-    { href: "/events", text: "Events", note: "Where the room gathers next" },
-    { href: "/blog", text: "Blog", note: "What we have been writing" },
+    { href: "/resources/post-builder", text: "Nara", note: "Transform raw ideas into authority" },
+    { href: "/programs", text: "Programs", note: "Pathways to accelerate your growth" },
+    { href: "/events", text: "Events", note: "Connect with women who dare" },
+    { href: "/blog", text: "Blog", note: "Insights and ecosystem analysis" },
   ];
 
   return (
@@ -77,7 +77,7 @@ export default function ComingSoon({
           href="/"
           className="mt-12 inline-block text-sm font-medium text-white/45 transition-colors hover:text-brand-pink"
         >
-          Back to the home page
+          Return to the home page
         </Link>
       </motion.div>
     </section>

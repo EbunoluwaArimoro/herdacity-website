@@ -4,7 +4,7 @@ import Footer from "@/components/layout/Footer";
 
 export const metadata: Metadata = {
   title: "Coming Soon | The HERdacity Network",
-  description: "This part of HERdacity is still being built.",
+  description: "We are actively building this feature. Check back soon for updates!",
 };
 
 export default function ComingSoonPage() {

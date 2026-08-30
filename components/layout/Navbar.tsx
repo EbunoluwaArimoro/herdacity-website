@@ -13,7 +13,7 @@ export default function Navbar() {
   const pathname = usePathname();
 
   // Pages that need a dark navbar (visible text) by default because they have light backgrounds
-  const forceDarkNavPaths = ["/privacy", "/terms", "/blog", "/faq"];
+  const forceDarkNavPaths = ["/privacy", "/terms", "/blog", "/faq", "/resources/post-builder"];
   const isDarkNav = forceDarkNavPaths.includes(pathname);
 
   useEffect(() => {
