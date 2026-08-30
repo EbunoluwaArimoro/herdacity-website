@@ -7,7 +7,8 @@ import FloatingNara from "@/components/ui/FloatingNara";
 export const metadata: Metadata = {
   title: "HERdacity | A Sisterhood for Women Who Dare",
   description: "A leadership ecosystem and professional growth community for ambitious women.",
-  icons: { icon: "/icon-white.png" },
+  // THIS IS THE FIX: Pointing to the dark icon instead of the white one
+  icons: { icon: "/icon.png" }, 
   
   // 1. Social Media Sharing (Open Graph)
   openGraph: {
@@ -17,7 +18,7 @@ export const metadata: Metadata = {
     siteName: "HERdacity",
     images: [
       {
-        url: "/logo-pink.png", // This is the image you asked for
+        url: "/logo-pink.png",
         width: 1200,
         height: 630,
         alt: "HERdacity Logo",
