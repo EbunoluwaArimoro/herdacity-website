@@ -6,6 +6,16 @@ import { usePathname } from "next/navigation"; // Added to check current page
 import { motion, AnimatePresence } from "framer-motion";
 import { useModal } from "@/context/ModalContext"; 
 
+// Defined navigation links so custom URLs like /resources/nara are easy to manage
+const navLinks = [
+  { label: "About", href: "/about" },
+  { label: "Programs", href: "/programs" },
+  { label: "Events", href: "/events" },
+  { label: "Voices", href: "/voices" },
+  { label: "Resources", href: "/resources" },
+  { label: "Use Nara", href: "/resources/nara" },
+];
+
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -48,6 +58,7 @@ export default function Navbar() {
                 src={showDarkStyle ? "/icon.png" : "/icon-white.png"} 
                 alt="Icon" 
                 fill
+                sizes="32px"
                 className="object-contain"
               />
             </div>
@@ -60,15 +71,15 @@ export default function Navbar() {
 
           {/* DESKTOP NAV */}
           <div className="hidden lg:flex items-center gap-8">
-            {['About', 'Programs', 'Events', 'Voices'].map((item) => (
+            {navLinks.map((item) => (
               <Link 
-                key={item} 
-                href={item === 'Blog' || item === 'FAQ' ? `/${item.toLowerCase()}` : `/${item.toLowerCase()}`} 
+                key={item.label} 
+                href={item.href} 
                 className={`text-sm font-medium transition-colors ${
                   showDarkStyle ? "text-brand-charcoal hover:text-brand-pink" : "text-white hover:text-white/80"
                 }`}
               >
-                {item}
+                {item.label}
               </Link>
             ))}
             
@@ -98,17 +109,17 @@ export default function Navbar() {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="fixed inset-0 z-[90] bg-white pt-32 px-6 lg:hidden"
+            className="fixed inset-0 z-[90] bg-white pt-32 px-6 lg:hidden overflow-y-auto pb-10"
           >
             <div className="flex flex-col gap-8 text-center">
-              {['About', 'Programs', 'Events', 'Voices'].map((item) => (
+              {navLinks.map((item) => (
                 <Link 
-                  key={item}
-                  href={`/${item.toLowerCase()}`}
+                  key={item.label}
+                  href={item.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className="text-2xl font-display font-bold text-brand-charcoal hover:text-brand-pink"
                 >
-                  {item}
+                  {item.label}
                 </Link>
               ))}
               <hr className="border-gray-100 w-full" />
