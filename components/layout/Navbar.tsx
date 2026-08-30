@@ -12,7 +12,6 @@ const navLinks = [
   { label: "Programs", href: "/programs" },
   { label: "Events", href: "/events" },
   { label: "Voices", href: "/voices" },
-  { label: "Resources", href: "/resources" },
   { label: "Use Nara", href: "/resources/nara" },
 ];
 

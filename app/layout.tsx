@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import { ModalProvider } from "@/context/ModalContext"; 
+import FloatingNara from "@/components/ui/FloatingNara";
 
 export const metadata: Metadata = {
   title: "HERdacity | A Sisterhood for Women Who Dare",
@@ -54,6 +55,7 @@ export default function RootLayout({
         <ModalProvider>
           <Navbar />
           <main>{children}</main>
+          <FloatingNara />
         </ModalProvider>
       </body>
     </html>
