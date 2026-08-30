@@ -100,7 +100,7 @@ export default function PostBuilder() {
     setBusy(true);
     setError("");
     try {
-      await fetch("/api/post-builder/access", {
+      await fetch("/api/nara/access", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, firstName }),
@@ -185,7 +185,7 @@ export default function PostBuilder() {
     setBusy(true);
     setError("");
     try {
-      const res = await fetch("/api/post-builder/angles", {
+      const res = await fetch("/api/nara/angles", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -219,7 +219,7 @@ export default function PostBuilder() {
     setBusy(true);
     setError("");
     try {
-      const res = await fetch("/api/post-builder/write", {
+      const res = await fetch("/api/nara/write", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -282,7 +282,7 @@ export default function PostBuilder() {
     setPillarsBusy(true);
     setError("");
     try {
-      const res = await fetch("/api/post-builder/pillars", {
+      const res = await fetch("/api/nara/pillars", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

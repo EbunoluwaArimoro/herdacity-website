@@ -15,7 +15,7 @@ const RESOURCES = [
     blurb:
       "You have industry-shifting ideas, but staring at a blank screen drains your momentum. Nara transforms your raw thoughts into polished, high-impact content structured for visibility. Build your personal brand without second-guessing your expertise.",
     cta: "Draft with Nara",
-    href: "/resources/post-builder",
+    href: "/resources/nara",
   },
 ];
 

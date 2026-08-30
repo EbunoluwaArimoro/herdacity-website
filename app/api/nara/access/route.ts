@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     // If the mailing list is not configured, still let her in.
     // A broken integration should never block the tool.
     if (!API_KEY || !FORM_ID) {
-      console.warn("[post-builder/access] ConvertKit not configured, allowing access anyway");
+      console.warn("[nara/access] ConvertKit not configured, allowing access anyway");
       return NextResponse.json({ ok: true, subscribed: false });
     }
 
@@ -38,13 +38,13 @@ export async function POST(request: Request) {
     });
 
     if (!res.ok) {
-      console.error("[post-builder/access] ConvertKit responded", res.status, await res.text());
+      console.error("[nara/access] ConvertKit responded", res.status, await res.text());
       return NextResponse.json({ ok: true, subscribed: false });
     }
 
     return NextResponse.json({ ok: true, subscribed: true });
   } catch (err) {
-    console.error("[post-builder/access]", err);
+    console.error("[nara/access]", err);
     return NextResponse.json({ ok: true, subscribed: false });
   }
 }

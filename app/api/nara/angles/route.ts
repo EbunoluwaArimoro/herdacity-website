@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { callGroq, parseJson, FAST_MODELS } from "@/lib/postBuilder/groq";
-import { anglesForPrompt } from "@/lib/postBuilder/angles";
+import { callGroq, parseJson, FAST_MODELS } from "@/lib/nara/groq";
+import { anglesForPrompt } from "@/lib/nara/angles";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -65,7 +65,7 @@ ${moment.trim()}`;
 
     return NextResponse.json({ options });
   } catch (err) {
-    console.error("[post-builder/angles]", err);
+    console.error("[nara/angles]", err);
     return NextResponse.json(
       { error: "Something went wrong on our side. Try again in a moment." },
       { status: 500 }

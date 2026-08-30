@@ -78,7 +78,7 @@ ${answered.map((p) => `Q: ${p.q}\nA: ${p.a.trim()}`).join("\n\n") || "(she skipp
 
     return NextResponse.json({ post: cleaned });
   } catch (err) {
-    console.error("[post-builder/write]", err);
+    console.error("[nara/write]", err);
     return NextResponse.json(
       { error: "The writer is busy. Give it a minute and try again." },
       { status: 500 }

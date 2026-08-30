@@ -15,7 +15,7 @@ export default function ComingSoon({
   message = "The feature you are looking for is currently in the lab. We are crafting it to meet the exact needs of the women in our network. While we put on the finishing touches, explore the tools and spaces already waiting for you.",
 }: ComingSoonProps) {
   const links = [
-    { href: "/resources/post-builder", text: "Nara", note: "Transform raw ideas into authority" },
+    { href: "/resources/nara", text: "Nara", note: "Transform raw ideas into authority" },
     { href: "/programs", text: "Programs", note: "Pathways to accelerate your growth" },
     { href: "/events", text: "Events", note: "Connect with women who dare" },
     { href: "/blog", text: "Blog", note: "Insights and ecosystem analysis" },

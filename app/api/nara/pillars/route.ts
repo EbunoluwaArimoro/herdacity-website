@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { callGroq, parseJson, FAST_MODELS } from "@/lib/postBuilder/groq";
+import { callGroq, parseJson, FAST_MODELS } from "@/lib/nara/groq";
 
 export const runtime = "nodejs";
 export const maxDuration = 30;
@@ -50,7 +50,7 @@ ${(Array.isArray(bank) ? bank : []).slice(-12).map((m: string) => `- ${m}`).join
 
     return NextResponse.json({ pillars });
   } catch (err) {
-    console.error("[post-builder/pillars]", err);
+    console.error("[nara/pillars]", err);
     return NextResponse.json({ error: "Could not read your pillars right now." }, { status: 500 });
   }
 }
