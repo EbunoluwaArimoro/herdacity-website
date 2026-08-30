@@ -74,17 +74,8 @@ const Back = ({
   </button>
 );
 
-const [session] = useState(() => Math.random().toString(36).slice(2, 12));
-
-const track = (event: string, props: Record<string, unknown> = {}) => {
-  void fetch("/api/nara/track", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ event, props, session }),
-  }).catch(() => {});
-};
-
-export default function PostBuilder() {
+export default function Nara() {
+  const [session] = useState(() => Math.random().toString(36).slice(2, 12));
   const [mounted, setMounted] = useState(false);
   const [store, setStore] = useState<Store>(emptyStore());
   const [view, setView] = useState<View>("gate");
@@ -115,6 +106,14 @@ export default function PostBuilder() {
   const [pillarDraft, setPillarDraft] = useState<
     { name: string; why: string }[] | null
   >(null);
+
+  const track = useCallback((event: string, props: Record<string, unknown> = {}) => {
+    void fetch("/api/nara/track", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ event, props, session }),
+    }).catch(() => {});
+  }, [session]);
 
   useEffect(() => {
     const s = load();
@@ -1106,4 +1105,3 @@ const DoorButton = ({
     </button>
   );
 };
-
