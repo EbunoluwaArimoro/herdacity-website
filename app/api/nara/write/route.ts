@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import { callGroq, WRITER_MODELS } from "@/lib/postBuilder/groq";
-import { WRITING_RULES, voiceBlock } from "@/lib/postBuilder/angles";
+import { callGroq, WRITER_MODELS } from "@/lib/nara/groq";
+import { WRITING_RULES, voiceBlock } from "@/lib/nara/angles";
 
 export const runtime = "nodejs";
 export const maxDuration = 45;
