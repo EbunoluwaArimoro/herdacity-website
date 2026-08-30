@@ -4,16 +4,8 @@
 const ENDPOINT = "https://api.groq.com/openai/v1/chat/completions";
 
 /**
- * Model IDs go stale. Groq retired the Llama chat models in 2026, so anything
- * still pointing at llama-3.1-8b-instant or llama-3.3-70b-versatile returns a
- * 400 and every call fails.
- *
- * If this ever breaks again, the live list is at:
- *   https://api.groq.com/openai/v1/models
- * Paste a current id in below. Order matters, the first one is tried first.
- *
- * Free plan allowance is per model AND per organisation, so splitting the two
- * jobs across two models doubles the daily headroom. Keep them different.
+ * Model IDs go stale. Groq retired the Llama chat models in 2026.
+ * The live list is at https://api.groq.com/openai/v1/models
  */
 
 // Cheap and quick. Reads her moment and writes her questions.
@@ -24,12 +16,14 @@ export const WRITER_MODELS = ["openai/gpt-oss-120b", "openai/gpt-oss-20b"];
 
 type Msg = { role: "system" | "user"; content: string };
 
+export type GroqResult = { text: string; model: string; fellBack: boolean };
+
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 export async function callGroq(
   messages: Msg[],
   opts: { models: string[]; maxTokens?: number; json?: boolean; temperature?: number }
-): Promise<string> {
+): Promise<GroqResult> {
   const key = process.env.GROQ_API_KEY;
   if (!key) {
     throw new Error("GROQ_API_KEY is not set on this deployment");
@@ -37,13 +31,12 @@ export async function callGroq(
 
   const failures: string[] = [];
 
-  // Two passes. The tokens-per-minute cap is the first thing that breaks when
-  // several women arrive at once, and it clears in seconds, so one short wait
-  // rescues most of those calls instead of showing an error.
   for (let pass = 0; pass < 2; pass++) {
     let sawRateLimit = false;
 
-    for (const model of opts.models) {
+    for (let i = 0; i < opts.models.length; i++) {
+      const model = opts.models[i];
+
       try {
         const res = await fetch(ENDPOINT, {
           method: "POST",
@@ -54,31 +47,33 @@ export async function callGroq(
           body: JSON.stringify({
             model,
             messages,
-            max_tokens: opts.maxTokens ?? 900,
-            temperature: opts.temperature ?? 0.8,
+            max_tokens: opts.maxTokens ?? 1400,
+            temperature: opts.temperature ?? 0.7,
+            // gpt-oss are reasoning models. Left to themselves they spend a
+            // lot of the budget thinking and start formatting the answer like
+            // a document. Low effort keeps them closer to the instruction.
+            ...(model.startsWith("openai/gpt-oss") ? { reasoning_effort: "low" } : {}),
             ...(opts.json ? { response_format: { type: "json_object" } } : {}),
           }),
         });
 
         if (res.status === 429) {
           sawRateLimit = true;
-          const detail = await res.text();
-          failures.push(`${model} -> 429 ${detail.slice(0, 200)}`);
+          failures.push(`${model} -> 429 ${(await res.text()).slice(0, 200)}`);
           continue;
         }
 
         if (!res.ok) {
-          // Read the body so a dead model or a bad key says so out loud
-          // instead of disappearing into a generic 500.
-          const detail = await res.text();
-          failures.push(`${model} -> ${res.status} ${detail.slice(0, 300)}`);
+          failures.push(`${model} -> ${res.status} ${(await res.text()).slice(0, 300)}`);
           continue;
         }
 
         const data = await res.json();
         const text = data?.choices?.[0]?.message?.content;
 
-        if (typeof text === "string" && text.trim()) return text.trim();
+        if (typeof text === "string" && text.trim()) {
+          return { text: text.trim(), model, fellBack: i > 0 || pass > 0 };
+        }
 
         failures.push(`${model} -> empty response`);
       } catch (err) {
@@ -86,13 +81,10 @@ export async function callGroq(
       }
     }
 
-    // Only worth waiting if the failure was a rate limit. A dead model or a
-    // bad key will fail exactly the same way a second time.
     if (!sawRateLimit) break;
     if (pass === 0) await sleep(4000);
   }
 
-  // This lands in the Vercel function logs, which is where to look first.
   console.error("[groq] every model failed:\n" + failures.join("\n"));
   throw new Error(failures.join(" | ") || "All models failed");
 }

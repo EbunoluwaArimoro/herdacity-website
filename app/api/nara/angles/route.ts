@@ -50,7 +50,7 @@ Return JSON only, in exactly this shape:
 What she captured:
 ${moment}`;
 
-    const raw = await callGroq(
+    const { text: raw, model } = await callGroq(
       [
         { role: "system", content: system },
         { role: "user", content: user },
@@ -80,7 +80,7 @@ ${moment}`;
     // Which angles the model offers, so we can compare against which get picked.
     trackAsync(
       "angles_returned",
-      { offered: options.map((o) => o.angleId).join(","), count: options.length, ms: Date.now() - started },
+      { offered: options.map((o) => o.angleId).join(","), count: options.length, ms: Date.now() - started, model },
       session
     );
 

@@ -30,7 +30,7 @@ ${(Array.isArray(posts) ? posts : []).slice(-8).map((p: string, i: number) => `$
 Moments she captured but has not posted:
 ${(Array.isArray(bank) ? bank : []).slice(-12).map((m: string) => `- ${m}`).join("\n") || "(none)"}`;
 
-    const raw = await callGroq(
+    const { text: raw } = await callGroq(
       [
         { role: "system", content: system },
         { role: "user", content: user },
@@ -50,7 +50,7 @@ ${(Array.isArray(bank) ? bank : []).slice(-12).map((m: string) => `- ${m}`).join
 
     return NextResponse.json({ pillars });
   } catch (err) {
-    console.error("[nara/pillars]", err);
+    console.error("[post-builder/pillars]", err);
     return NextResponse.json({ error: "Could not read your pillars right now." }, { status: 500 });
   }
 }

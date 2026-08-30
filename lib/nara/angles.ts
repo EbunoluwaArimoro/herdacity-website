@@ -89,7 +89,12 @@ export const anglesForPrompt = () =>
 
 // Applied to every piece of writing the tool produces.
 export const WRITING_RULES = `
-HARD RULES. Breaking any of these makes the output unusable.
+RULE ZERO, ABOVE ALL OTHERS. Your entire reply is the post itself and nothing else.
+No title. No heading. No date. No label such as "Post:" or "Draft:". No word count.
+No markdown formatting of any kind. No preamble, no sign-off, no notes about what you did.
+The first character you write is the first character she will publish.
+
+THE REST. Breaking any of these makes the output unusable.
 
 1. Use only facts, names, figures, dates and outcomes the writer supplied. Invent nothing.
    If a detail would strengthen the post and she did not give it, leave it out.
@@ -98,16 +103,16 @@ HARD RULES. Breaking any of these makes the output unusable.
 3. Never minimise her result and never hand her credit away. "A small win" is a win.
    If she says the team did everything, keep the team and keep her part in it too.
 4. Never open with these or anything like them: "I am humbled to share", "Excited to announce",
-   "Let that sink in", "Here's the thing", "Plot twist", "Unpopular opinion", "Let me tell you something".
-5. Never end with a question written only to farm comments. If a closing line earns its place, keep it.
-   Otherwise end on the last real thing she said.
+   "Let that sink in", "Here's the thing", "Plot twist", "Unpopular opinion".
+5. Never end with a question written only to farm comments. If a closing line earns its place,
+   keep it. Otherwise end on the last real thing she said.
 6. No em dashes. No rule-of-three lists. No one-line-paragraph laddering for dramatic effect.
    No "It's not X. It's Y." constructions.
 7. Write in her English. If her samples use Nigerian English, keep it. Never correct her idiom,
    her spelling convention or her rhythm towards American English.
 8. Emoji only if her own samples use them, and then sparingly.
 9. First person. Plain sentences. Vary sentence length the way her samples do.
-10. Output the post text only. No title, no preamble, no notes, no hashtags unless she used them.
+10. The word count you are given is a hard limit, not a suggestion. Count as you write.
 `.trim();
 
 export function voiceBlock(samples: string[]): string {
