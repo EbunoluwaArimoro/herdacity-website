@@ -43,6 +43,7 @@ export default function Footer() {
                   src="/icon-white.png" 
                   alt="HERdacity Icon" 
                   fill
+                  sizes="32px"
                   className="object-contain"
                 />
               </div>
@@ -60,7 +61,7 @@ export default function Footer() {
             
             {status === "success" ? (
               <div className="bg-brand-pink/20 border border-brand-pink text-white px-6 py-3 rounded-[50px] text-sm">
-                🎉 You're on the list! Check your inbox.
+                🎉 You&apos;re on the list! Check your inbox.
               </div>
             ) : (
               // UPDATED FORM: Single Pill Design
@@ -109,18 +110,20 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-white mb-6 text-sm uppercase tracking-wider">Resources</h4>
             <ul className="space-y-4 text-sm text-white/50">
+              <li><Link href="/resources" className="hover:text-brand-pink transition-colors">All Resources</Link></li>
+              <li><Link href="/resources/post-builder" className="hover:text-brand-pink transition-colors">Post Builder</Link></li>
               <li><Link href="/events" className="hover:text-brand-pink transition-colors">Events</Link></li>
               <li><Link href="/blog" className="hover:text-brand-pink transition-colors">Blog</Link></li>
               <li><Link href="/faq" className="hover:text-brand-pink transition-colors">FAQ</Link></li>
             </ul>
           </div>
-
+          
           <div>
             <h4 className="font-bold text-white mb-6 text-sm uppercase tracking-wider">Socials</h4>
             <ul className="space-y-4 text-sm text-white/50">
-              <li><a href="https://www.instagram.com/herdacity/" target="_blank" className="hover:text-brand-pink transition-colors">Instagram</a></li>
-              <li><a href="https://www.linkedin.com/company/the-herdacity-network/" target="_blank" className="hover:text-brand-pink transition-colors">LinkedIn</a></li>
-              <li><a href="https://www.facebook.com/profile.php?id=61585711823791" target="_blank" className="hover:text-brand-pink transition-colors">Facebook</a></li>
+              <li><a href="https://www.instagram.com/herdacity/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-pink transition-colors">Instagram</a></li>
+              <li><a href="https://www.linkedin.com/company/the-herdacity-network/" target="_blank" rel="noopener noreferrer" className="hover:text-brand-pink transition-colors">LinkedIn</a></li>
+              <li><a href="https://www.facebook.com/profile.php?id=61585711823791" target="_blank" rel="noopener noreferrer" className="hover:text-brand-pink transition-colors">Facebook</a></li>
             </ul>
           </div>
 
