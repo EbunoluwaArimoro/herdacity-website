@@ -22,7 +22,7 @@ import {
   save,
   shouldAskRecency,
   today,
-} from "@/lib/postBuilder/storage";
+} from "@/lib/nara/storage";
 
 type Option = { angleId: string; label: string; questions: string[] };
 type View = "gate" | "setup" | "home" | "compose" | "angles" | "questions" | "post";
