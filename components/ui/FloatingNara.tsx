@@ -68,9 +68,9 @@ export default function FloatingNara() {
               <span className="font-display text-sm font-bold tracking-tight md:text-base">
                 Use Nara
               </span>
-              <span className="mt-1 hidden text-[11px] font-medium text-white/70 md:block">
-                Turn this week into a post
-              </span>
+                <span className="text-xs font-medium tracking-tight md:text-sm">
+                    Build your post with AI
+                </span>
             </span>
           </Link>
 
