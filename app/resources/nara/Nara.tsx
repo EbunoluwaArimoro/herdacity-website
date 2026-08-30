@@ -41,6 +41,39 @@ const REFINEMENTS = [
   { id: "plainer", label: "Plainer" },
 ];
 
+const Shell = ({ children }: { children: React.ReactNode }) => (
+  <div className="min-h-screen bg-brand-off-white">
+    <div className="mx-auto w-full max-w-2xl px-5 pb-24 pt-28 sm:pt-32">{children}</div>
+  </div>
+);
+
+const Err = ({ error }: { error: string }) =>
+  error ? (
+    <p className="mt-3 rounded-xl bg-brand-blush/60 px-4 py-3 text-sm text-brand-charcoal">
+      {error}
+    </p>
+  ) : null;
+
+const Back = ({
+  to,
+  setError,
+  setView,
+}: {
+  to: View;
+  setError: React.Dispatch<React.SetStateAction<string>>;
+  setView: React.Dispatch<React.SetStateAction<View>>;
+}) => (
+  <button
+    onClick={() => {
+      setError("");
+      setView(to);
+    }}
+    className="mb-6 flex items-center gap-2 text-sm text-brand-charcoal/60 transition-colors hover:text-brand-pink"
+  >
+    <ArrowLeft size={16} /> Back
+  </button>
+);
+
 export default function PostBuilder() {
   const [mounted, setMounted] = useState(false);
   const [store, setStore] = useState<Store>(emptyStore());
@@ -69,12 +102,15 @@ export default function PostBuilder() {
   const [capture, setCapture] = useState("");
   const [recencyAnswer, setRecencyAnswer] = useState("");
   const [pillarsBusy, setPillarsBusy] = useState(false);
-  const [pillarDraft, setPillarDraft] = useState<{ name: string; why: string }[] | null>(null);
+  const [pillarDraft, setPillarDraft] = useState<
+    { name: string; why: string }[] | null
+  >(null);
 
   useEffect(() => {
     const s = load();
     setStore(s);
     setMounted(true);
+
     if (!s.email) setView("gate");
     else if (!s.profile.what) setView("setup");
     else setView("home");
@@ -85,10 +121,20 @@ export default function PostBuilder() {
     save(next);
   }, []);
 
-  const unused = useMemo(() => store.bank.filter((m) => !m.used).reverse(), [store.bank]);
-  const remaining = DAILY_LIMIT - (store.usage.date === today() ? store.usage.count : 0);
-  const askRecency = mounted && view === "home" && shouldAskRecency(store);
-  const recencyPrompt = RECENCY_PROMPTS[store.recencyIndex % RECENCY_PROMPTS.length];
+  const unused = useMemo(
+    () => store.bank.filter((m) => !m.used).reverse(),
+    [store.bank]
+  );
+
+  const remaining =
+    DAILY_LIMIT -
+    (store.usage.date === today() ? store.usage.count : 0);
+
+  const askRecency =
+    mounted && view === "home" && shouldAskRecency(store);
+
+  const recencyPrompt =
+    RECENCY_PROMPTS[store.recencyIndex % RECENCY_PROMPTS.length];
 
   // ---------- actions ----------
 
@@ -97,8 +143,10 @@ export default function PostBuilder() {
       setError("That email does not look right.");
       return;
     }
+
     setBusy(true);
     setError("");
+
     try {
       await fetch("/api/nara/access", {
         method: "POST",
@@ -108,7 +156,9 @@ export default function PostBuilder() {
     } catch {
       // Never block her on the mailing list.
     }
+
     const next = { ...store, email };
+
     persist(next);
     setBusy(false);
     setView("setup");
@@ -119,7 +169,9 @@ export default function PostBuilder() {
       setError("One line is enough, but I do need it.");
       return;
     }
+
     setError("");
+
     persist({
       ...store,
       profile: {
@@ -128,11 +180,13 @@ export default function PostBuilder() {
         samples: sample.trim() ? [sample.trim()] : [],
       },
     });
+
     setView("home");
   }
 
   function addMoment(text: string, source: Moment["source"]) {
     if (!text.trim()) return;
+
     const moment: Moment = {
       id: newId(),
       text: text.trim(),
@@ -140,32 +194,55 @@ export default function PostBuilder() {
       used: false,
       source,
     };
-    persist({ ...store, bank: [...store.bank, moment] });
+
+    persist({
+      ...store,
+      bank: [...store.bank, moment],
+    });
   }
 
   function answerRecency() {
     if (!recencyAnswer.trim()) return;
+
     persist({
       ...store,
       bank: [
         ...store.bank,
-        { id: newId(), text: recencyAnswer.trim(), at: Date.now(), used: false, source: "recency" },
+        {
+          id: newId(),
+          text: recencyAnswer.trim(),
+          at: Date.now(),
+          used: false,
+          source: "recency",
+        },
       ],
       lastRecencyPromptAt: Date.now(),
       recencyIndex: store.recencyIndex + 1,
     });
+
     setRecencyAnswer("");
   }
 
   function skipRecency() {
-    persist({ ...store, lastRecencyPromptAt: Date.now(), recencyIndex: store.recencyIndex + 1 });
+    persist({
+      ...store,
+      lastRecencyPromptAt: Date.now(),
+      recencyIndex: store.recencyIndex + 1,
+    });
   }
 
   function deleteMoment(id: string) {
-    persist({ ...store, bank: store.bank.filter((m) => m.id !== id) });
+    persist({
+      ...store,
+      bank: store.bank.filter((m) => m.id !== id),
+    });
   }
 
-  function openCompose(m: Mode, text = "", momentId: string | null = null) {
+  function openCompose(
+    m: Mode,
+    text = "",
+    momentId: string | null = null
+  ) {
     setMode(m);
     setDraft(text);
     setSourceMomentId(momentId);
@@ -182,8 +259,10 @@ export default function PostBuilder() {
       setError("A line or two, then I can work with it.");
       return;
     }
+
     setBusy(true);
     setError("");
+
     try {
       const res = await fetch("/api/nara/angles", {
         method: "POST",
@@ -194,13 +273,21 @@ export default function PostBuilder() {
           mode: mode === "reaction" ? "reaction" : "moment",
         }),
       });
+
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Could not read that.");
+
+      if (!res.ok) {
+        throw new Error(data.error || "Could not read that.");
+      }
+
       setOptions(data.options);
       setView("angles");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(
+        err instanceof Error ? err.message : "Something went wrong."
+      );
     }
+
     setBusy(false);
   }
 
@@ -213,11 +300,15 @@ export default function PostBuilder() {
 
   async function writePost(tone?: string) {
     if (remaining <= 0 && !tone) {
-      setError("That is five posts today. Come back tomorrow, the bank will keep.");
+      setError(
+        "That is five posts today. Come back tomorrow, the bank will keep."
+      );
       return;
     }
+
     setBusy(true);
     setError("");
+
     try {
       const res = await fetch("/api/nara/write", {
         method: "POST",
@@ -225,7 +316,10 @@ export default function PostBuilder() {
         body: JSON.stringify({
           moment: draft,
           angleLabel: chosen?.label,
-          qa: (chosen?.questions || []).map((q, i) => ({ q, a: answers[i] || "" })),
+          qa: (chosen?.questions || []).map((q, i) => ({
+            q,
+            a: answers[i] || "",
+          })),
           length,
           samples: store.profile.samples,
           what: store.profile.what,
@@ -233,19 +327,35 @@ export default function PostBuilder() {
           previous: tone ? postText : undefined,
         }),
       });
+
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Could not write that.");
+
+      if (!res.ok) {
+        throw new Error(data.error || "Could not write that.");
+      }
+
       setPostText(data.post);
+
       if (!tone) {
         persist({
           ...store,
-          usage: { date: today(), count: (store.usage.date === today() ? store.usage.count : 0) + 1 },
+          usage: {
+            date: today(),
+            count:
+              (store.usage.date === today()
+                ? store.usage.count
+                : 0) + 1,
+          },
         });
       }
+
       setView("post");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong.");
+      setError(
+        err instanceof Error ? err.message : "Something went wrong."
+      );
     }
+
     setBusy(false);
   }
 
@@ -255,7 +365,9 @@ export default function PostBuilder() {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     } catch {
-      setError("Copying is blocked in this browser. Select the text and copy it by hand.");
+      setError(
+        "Copying is blocked in this browser. Select the text and copy it by hand."
+      );
     }
   }
 
@@ -272,8 +384,11 @@ export default function PostBuilder() {
           at: Date.now(),
         },
       ],
-      bank: store.bank.map((m) => (m.id === sourceMomentId ? { ...m, used: true } : m)),
+      bank: store.bank.map((m) =>
+        m.id === sourceMomentId ? { ...m, used: true } : m
+      ),
     };
+
     persist(next);
     setView("home");
   }
@@ -281,6 +396,7 @@ export default function PostBuilder() {
   async function readPillars() {
     setPillarsBusy(true);
     setError("");
+
     try {
       const res = await fetch("/api/nara/pillars", {
         method: "POST",
@@ -291,39 +407,26 @@ export default function PostBuilder() {
           bank: store.bank.map((m) => m.text),
         }),
       });
+
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Not yet.");
+
+      if (!res.ok) {
+        throw new Error(data.error || "Not yet.");
+      }
+
       setPillarDraft(data.pillars);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Could not read your pillars.");
+      setError(
+        err instanceof Error
+          ? err.message
+          : "Could not read your pillars."
+      );
     }
+
     setPillarsBusy(false);
   }
 
   // ---------- shared bits ----------
-
-  const Shell = ({ children }: { children: React.ReactNode }) => (
-    <div className="min-h-screen bg-brand-off-white">
-      <div className="mx-auto w-full max-w-2xl px-5 pb-24 pt-28 sm:pt-32">{children}</div>
-    </div>
-  );
-
-  const Err = () =>
-    error ? (
-      <p className="mt-3 rounded-xl bg-brand-blush/60 px-4 py-3 text-sm text-brand-charcoal">{error}</p>
-    ) : null;
-
-  const Back = ({ to }: { to: View }) => (
-    <button
-      onClick={() => {
-        setError("");
-        setView(to);
-      }}
-      className="mb-6 flex items-center gap-2 text-sm text-brand-charcoal/60 transition-colors hover:text-brand-pink"
-    >
-      <ArrowLeft size={16} /> Back
-    </button>
-  );
 
   const field =
     "w-full rounded-2xl border border-brand-charcoal/10 bg-white px-4 py-3 text-base text-brand-charcoal outline-none transition-colors placeholder:text-brand-charcoal/35 focus:border-brand-pink";
@@ -349,13 +452,19 @@ export default function PostBuilder() {
         <p className="font-display text-sm font-semibold uppercase tracking-[0.2em] text-brand-pink">
           Nara by The HERdacity Network
         </p>
+
         <h1 className="mt-3 font-display text-4xl font-bold leading-tight text-brand-charcoal sm:text-5xl">
           Your expertise deserves the spotlight.
         </h1>
+
         <p className="mt-5 text-lg leading-relaxed text-brand-charcoal/70">
-          Input your raw thoughts.</br>
-          Nara asks the critical questions you might overlook, structuring your insights into high-impact posts written in your authentic voice.
+          Input your raw thoughts.
+          <br />
+          Nara asks the critical questions you might overlook, structuring
+          your insights into high-impact posts written in your authentic
+          voice.
         </p>
+
         <div className="mt-10 space-y-3">
           <input
             className={field}
@@ -363,6 +472,7 @@ export default function PostBuilder() {
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
+
           <input
             className={field}
             type="email"
@@ -371,10 +481,17 @@ export default function PostBuilder() {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
-          <button className={primary} onClick={submitEmail} disabled={busy}>
+
+          <button
+            className={primary}
+            onClick={submitEmail}
+            disabled={busy}
+          >
             {busy ? "One moment" : "Access Nara"}
           </button>
-          <Err />
+
+          <Err error={error} />
+
           <p className="pt-2 text-center text-xs leading-relaxed text-brand-charcoal/50">
             Everything you write in here stays on your own device and
             never reaches us.
@@ -387,9 +504,13 @@ export default function PostBuilder() {
   if (view === "setup") {
     return (
       <Shell>
-        <h1 className="font-display text-3xl font-bold text-brand-charcoal">Two questions, then you are in.</h1>
+        <h1 className="font-display text-3xl font-bold text-brand-charcoal">
+          Two questions, then you are in.
+        </h1>
+
         <p className="mt-3 text-brand-charcoal/70">
-          This takes about a minute. Everything else it learns from what you write.
+          This takes about a minute. Everything else it learns from what
+          you write.
         </p>
 
         <div className="mt-8 space-y-6">
@@ -397,9 +518,11 @@ export default function PostBuilder() {
             <label className="font-display text-sm font-semibold text-brand-charcoal">
               What do you do, and who for?
             </label>
+
             <p className="mb-2 mt-1 text-sm text-brand-charcoal/55">
               One line, the way you would say it to someone at a party.
             </p>
+
             <input
               className={field}
               placeholder="I build payment products for small businesses in Nigeria"
@@ -412,10 +535,13 @@ export default function PostBuilder() {
             <label className="font-display text-sm font-semibold text-brand-charcoal">
               Paste something you have written before.
             </label>
+
             <p className="mb-2 mt-1 text-sm text-brand-charcoal/55">
-              Any old post, or part of an email. This is how it learns to sound like you rather than like a
-              chatbot. Skip it if you would rather.
+              Any old post, or part of an email. This is how it learns to
+              sound like you rather than like a chatbot. Skip it if you
+              would rather.
             </p>
+
             <textarea
               className={`${field} min-h-[140px] resize-y`}
               placeholder="Paste here"
@@ -427,7 +553,8 @@ export default function PostBuilder() {
           <button className={primary} onClick={finishSetup}>
             Start
           </button>
-          <Err />
+
+          <Err error={error} />
         </div>
       </Shell>
     );
@@ -438,22 +565,30 @@ export default function PostBuilder() {
       <Shell>
         <div className="flex items-baseline justify-between">
           <h1 className="font-display text-3xl font-bold text-brand-charcoal">
-            {store.posts.length ? "What is on your mind?" : "Let us start with what happened."}
+            {store.posts.length
+              ? "What is on your mind?"
+              : "Let us start with what happened."}
           </h1>
         </div>
 
         {askRecency && (
           <div className="mt-7 rounded-3xl border border-brand-pink/25 bg-brand-blush/35 p-5">
-            <p className="font-display text-base font-semibold text-brand-charcoal">{recencyPrompt}</p>
-            <p className="mt-1 text-sm text-brand-charcoal/60">
-              One line. It saves to your bank so there is always something here when you need it.
+            <p className="font-display text-base font-semibold text-brand-charcoal">
+              {recencyPrompt}
             </p>
+
+            <p className="mt-1 text-sm text-brand-charcoal/60">
+              One line. It saves to your bank so there is always something
+              here when you need it.
+            </p>
+
             <textarea
               className={`${field} mt-3 min-h-[80px] resize-y`}
               placeholder="Type it however it comes out"
               value={recencyAnswer}
               onChange={(e) => setRecencyAnswer(e.target.value)}
             />
+
             <div className="mt-3 flex gap-2">
               <button
                 onClick={answerRecency}
@@ -461,6 +596,7 @@ export default function PostBuilder() {
               >
                 Save it
               </button>
+
               <button
                 onClick={skipRecency}
                 className="rounded-full px-4 py-2.5 text-sm text-brand-charcoal/55 hover:text-brand-charcoal"
@@ -472,16 +608,21 @@ export default function PostBuilder() {
         )}
 
         <div className="mt-7 rounded-3xl bg-white p-5 shadow-sm">
-          <label className="font-display text-sm font-semibold text-brand-charcoal">What happened?</label>
+          <label className="font-display text-sm font-semibold text-brand-charcoal">
+            What happened?
+          </label>
+
           <p className="mb-3 mt-1 text-sm text-brand-charcoal/55">
             Anything at all. Ten seconds now saves you a blank page later.
           </p>
+
           <textarea
             className={`${field} min-h-[80px] resize-y`}
             placeholder="A meeting, a number, something that annoyed you"
             value={capture}
             onChange={(e) => setCapture(e.target.value)}
           />
+
           <button
             onClick={() => {
               addMoment(capture, "capture");
@@ -500,15 +641,19 @@ export default function PostBuilder() {
             sub="You know what you want to say"
             onClick={() => openCompose("moment")}
           />
+
           <DoorButton
             title="I have nothing today"
             sub={
               unused.length
-                ? `${unused.length} thing${unused.length === 1 ? "" : "s"} waiting in your bank`
+                ? `${unused.length} thing${
+                    unused.length === 1 ? "" : "s"
+                  } waiting in your bank`
                 : "Save a moment above and this fills up"
             }
             onClick={() => openCompose("blank")}
           />
+
           <DoorButton
             title="React to this"
             sub="Paste something you read and give it your take"
@@ -521,6 +666,7 @@ export default function PostBuilder() {
             <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-brand-charcoal/45">
               Your bank
             </h2>
+
             <div className="mt-3 space-y-2">
               {unused.slice(0, 8).map((m) => (
                 <div
@@ -528,11 +674,14 @@ export default function PostBuilder() {
                   className="group flex items-start gap-3 rounded-2xl bg-white px-4 py-3 shadow-sm"
                 >
                   <button
-                    onClick={() => openCompose("moment", m.text, m.id)}
+                    onClick={() =>
+                      openCompose("moment", m.text, m.id)
+                    }
                     className="flex-1 text-left text-sm leading-relaxed text-brand-charcoal/80"
                   >
                     {m.text}
                   </button>
+
                   <button
                     onClick={() => deleteMoment(m.id)}
                     aria-label="Delete"
@@ -546,25 +695,37 @@ export default function PostBuilder() {
           </div>
         )}
 
-        {store.posts.length >= 3 && !store.profile.pillars && !pillarDraft && (
-          <button
-            onClick={readPillars}
-            disabled={pillarsBusy}
-            className="mt-10 flex w-full items-center justify-center gap-2 rounded-3xl border border-brand-pink/30 bg-white px-5 py-5 text-left font-display text-base font-semibold text-brand-charcoal transition-colors hover:border-brand-pink"
-          >
-            {pillarsBusy ? <Loader2 className="animate-spin" size={18} /> : <Sparkles size={18} className="text-brand-pink" />}
-            {pillarsBusy ? "Reading what you have written" : "See what you are actually building"}
-          </button>
-        )}
+        {store.posts.length >= 3 &&
+          !store.profile.pillars &&
+          !pillarDraft && (
+            <button
+              onClick={readPillars}
+              disabled={pillarsBusy}
+              className="mt-10 flex w-full items-center justify-center gap-2 rounded-3xl border border-brand-pink/30 bg-white px-5 py-5 text-left font-display text-base font-semibold text-brand-charcoal transition-colors hover:border-brand-pink"
+            >
+              {pillarsBusy ? (
+                <Loader2 className="animate-spin" size={18} />
+              ) : (
+                <Sparkles size={18} className="text-brand-pink" />
+              )}
+
+              {pillarsBusy
+                ? "Reading what you have written"
+                : "See what you are actually building"}
+            </button>
+          )}
 
         {pillarDraft && (
           <div className="mt-10 rounded-3xl bg-white p-6 shadow-sm">
             <h2 className="font-display text-xl font-bold text-brand-charcoal">
               Four things you are becoming known for
             </h2>
+
             <p className="mt-2 text-sm text-brand-charcoal/60">
-              Read from your own posts, not from a template. Change anything that is wrong.
+              Read from your own posts, not from a template. Change
+              anything that is wrong.
             </p>
+
             <div className="mt-5 space-y-4">
               {pillarDraft.map((p, i) => (
                 <div key={i}>
@@ -573,21 +734,32 @@ export default function PostBuilder() {
                     value={p.name}
                     onChange={(e) => {
                       const next = [...pillarDraft];
-                      next[i] = { ...next[i], name: e.target.value };
+                      next[i] = {
+                        ...next[i],
+                        name: e.target.value,
+                      };
                       setPillarDraft(next);
                     }}
                   />
-                  <p className="mt-1.5 px-1 text-sm text-brand-charcoal/55">{p.why}</p>
+
+                  <p className="mt-1.5 px-1 text-sm text-brand-charcoal/55">
+                    {p.why}
+                  </p>
                 </div>
               ))}
             </div>
+
             <button
               className={`${primary} mt-6`}
               onClick={() => {
                 persist({
                   ...store,
-                  profile: { ...store.profile, pillars: pillarDraft.map((p) => p.name) },
+                  profile: {
+                    ...store.profile,
+                    pillars: pillarDraft.map((p) => p.name),
+                  },
                 });
+
                 setPillarDraft(null);
               }}
             >
@@ -601,9 +773,13 @@ export default function PostBuilder() {
             <h2 className="font-display text-sm font-semibold uppercase tracking-widest text-brand-charcoal/45">
               What you are building
             </h2>
+
             <ul className="mt-3 space-y-2">
               {store.profile.pillars.map((p, i) => (
-                <li key={i} className="rounded-2xl bg-white px-4 py-3 text-sm text-brand-charcoal/80 shadow-sm">
+                <li
+                  key={i}
+                  className="rounded-2xl bg-white px-4 py-3 text-sm text-brand-charcoal/80 shadow-sm"
+                >
                   {p}
                 </li>
               ))}
@@ -611,7 +787,7 @@ export default function PostBuilder() {
           </div>
         )}
 
-        <Err />
+        <Err error={error} />
       </Shell>
     );
   }
@@ -619,7 +795,12 @@ export default function PostBuilder() {
   if (view === "compose") {
     return (
       <Shell>
-        <Back to="home" />
+        <Back
+          to="home"
+          setError={setError}
+          setView={setView}
+        />
+
         <h1 className="font-display text-2xl font-bold text-brand-charcoal">
           {mode === "reaction"
             ? "What did you read?"
@@ -632,10 +813,11 @@ export default function PostBuilder() {
           <div className="mt-5 space-y-2">
             {unused.length === 0 && (
               <p className="rounded-2xl bg-white px-4 py-4 text-sm text-brand-charcoal/60 shadow-sm">
-                Your bank is empty. Go back and answer the question on the home screen, or just type
-                something below.
+                Your bank is empty. Go back and answer the question on
+                the home screen, or just type something below.
               </p>
             )}
+
             {unused.map((m) => (
               <button
                 key={m.id}
@@ -660,6 +842,7 @@ export default function PostBuilder() {
             ? "Paste the headline, the post, or the part that got your attention."
             : "Messy is fine. Fragments are fine. Nobody sees this but you."}
         </p>
+
         <textarea
           className={`${field} min-h-[160px] resize-y`}
           placeholder={
@@ -671,7 +854,11 @@ export default function PostBuilder() {
           onChange={(e) => setDraft(e.target.value)}
         />
 
-        <button className={`${primary} mt-5`} onClick={findAngles} disabled={busy}>
+        <button
+          className={`${primary} mt-5`}
+          onClick={findAngles}
+          disabled={busy}
+        >
           {busy ? (
             <span className="inline-flex items-center gap-2">
               <Loader2 className="animate-spin" size={18} /> Reading it
@@ -680,7 +867,8 @@ export default function PostBuilder() {
             "Show me what this could be"
           )}
         </button>
-        <Err />
+
+        <Err error={error} />
       </Shell>
     );
   }
@@ -688,11 +876,19 @@ export default function PostBuilder() {
   if (view === "angles") {
     return (
       <Shell>
-        <Back to="compose" />
+        <Back
+          to="compose"
+          setError={setError}
+          setView={setView}
+        />
+
         <h1 className="font-display text-2xl font-bold text-brand-charcoal">
           There are a few posts in this.
         </h1>
-        <p className="mt-2 text-brand-charcoal/65">Pick the one you actually want to write.</p>
+
+        <p className="mt-2 text-brand-charcoal/65">
+          Pick the one you actually want to write.
+        </p>
 
         <div className="mt-7 space-y-3">
           {options.map((o, i) => (
@@ -701,7 +897,10 @@ export default function PostBuilder() {
               onClick={() => chooseOption(o)}
               className="w-full rounded-3xl bg-white px-5 py-5 text-left shadow-sm transition-all hover:shadow-md"
             >
-              <p className="font-display text-lg font-semibold leading-snug text-brand-charcoal">{o.label}</p>
+              <p className="font-display text-lg font-semibold leading-snug text-brand-charcoal">
+                {o.label}
+              </p>
+
               <p className="mt-1.5 text-sm text-brand-charcoal/50">
                 {o.questions.length} quick questions
               </p>
@@ -716,7 +915,8 @@ export default function PostBuilder() {
         >
           <RefreshCw size={14} /> Show me different ones
         </button>
-        <Err />
+
+        <Err error={error} />
       </Shell>
     );
   }
@@ -724,16 +924,28 @@ export default function PostBuilder() {
   if (view === "questions") {
     return (
       <Shell>
-        <Back to="angles" />
-        <h1 className="font-display text-2xl font-bold leading-snug text-brand-charcoal">{chosen?.label}</h1>
+        <Back
+          to="angles"
+          setError={setError}
+          setView={setView}
+        />
+
+        <h1 className="font-display text-2xl font-bold leading-snug text-brand-charcoal">
+          {chosen?.label}
+        </h1>
+
         <p className="mt-2 text-brand-charcoal/65">
-          Only what is missing. One line each is plenty, and you can skip any of them.
+          Only what is missing. One line each is plenty, and you can
+          skip any of them.
         </p>
 
         <div className="mt-7 space-y-5">
           {chosen?.questions.map((q, i) => (
             <div key={i}>
-              <label className="font-display text-sm font-semibold text-brand-charcoal">{q}</label>
+              <label className="font-display text-sm font-semibold text-brand-charcoal">
+                {q}
+              </label>
+
               <textarea
                 className={`${field} mt-2 min-h-[70px] resize-y`}
                 value={answers[i] || ""}
@@ -748,18 +960,32 @@ export default function PostBuilder() {
         </div>
 
         <div className="mt-8">
-          <p className="font-display text-sm font-semibold text-brand-charcoal">How long?</p>
+          <p className="font-display text-sm font-semibold text-brand-charcoal">
+            How long?
+          </p>
+
           <div className="mt-3 grid grid-cols-3 gap-2">
             {LENGTHS.map((l) => (
               <button
                 key={l.id}
                 onClick={() => setLength(l.id)}
                 className={`rounded-2xl px-3 py-3 text-left transition-colors ${
-                  length === l.id ? "bg-brand-pink text-white" : "bg-white text-brand-charcoal shadow-sm"
+                  length === l.id
+                    ? "bg-brand-pink text-white"
+                    : "bg-white text-brand-charcoal shadow-sm"
                 }`}
               >
-                <span className="block font-display text-sm font-semibold">{l.label}</span>
-                <span className={`block text-xs ${length === l.id ? "text-white/75" : "text-brand-charcoal/45"}`}>
+                <span className="block font-display text-sm font-semibold">
+                  {l.label}
+                </span>
+
+                <span
+                  className={`block text-xs ${
+                    length === l.id
+                      ? "text-white/75"
+                      : "text-brand-charcoal/45"
+                  }`}
+                >
                   {l.hint}
                 </span>
               </button>
@@ -767,7 +993,11 @@ export default function PostBuilder() {
           </div>
         </div>
 
-        <button className={`${primary} mt-7`} onClick={() => writePost()} disabled={busy}>
+        <button
+          className={`${primary} mt-7`}
+          onClick={() => writePost()}
+          disabled={busy}
+        >
           {busy ? (
             <span className="inline-flex items-center gap-2">
               <Loader2 className="animate-spin" size={18} /> Writing
@@ -776,10 +1006,12 @@ export default function PostBuilder() {
             "Write my post"
           )}
         </button>
+
         <p className="mt-3 text-center text-xs text-brand-charcoal/45">
           {remaining} left today
         </p>
-        <Err />
+
+        <Err error={error} />
       </Shell>
     );
   }
@@ -787,8 +1019,16 @@ export default function PostBuilder() {
   // view === "post"
   return (
     <Shell>
-      <Back to="questions" />
-      <h1 className="font-display text-2xl font-bold text-brand-charcoal">Here it is.</h1>
+      <Back
+        to="questions"
+        setError={setError}
+        setView={setView}
+      />
+
+      <h1 className="font-display text-2xl font-bold text-brand-charcoal">
+        Here it is.
+      </h1>
+
       <p className="mt-2 text-brand-charcoal/65">
         Every fact in this came from you. Edit it freely, it is yours.
       </p>
@@ -812,7 +1052,10 @@ export default function PostBuilder() {
         ))}
       </div>
 
-      <button className={`${primary} mt-6 flex items-center justify-center gap-2`} onClick={copyPost}>
+      <button
+        className={`${primary} mt-6 flex items-center justify-center gap-2`}
+        onClick={copyPost}
+      >
         {copied ? <Check size={18} /> : <Copy size={18} />}
         {copied ? "Copied" : "Copy the post"}
       </button>
@@ -823,19 +1066,33 @@ export default function PostBuilder() {
       >
         Done, take me back
       </button>
-      <Err />
+
+      <Err error={error} />
     </Shell>
   );
 }
 
-function DoorButton({ title, sub, onClick }: { title: string; sub: string; onClick: () => void }) {
+const DoorButton = ({
+  title,
+  sub,
+  onClick,
+}: {
+  title: string;
+  sub: string;
+  onClick: () => void;
+}) => {
   return (
     <button
       onClick={onClick}
       className="w-full rounded-3xl bg-white px-5 py-5 text-left shadow-sm transition-all hover:shadow-md"
     >
-      <span className="block font-display text-lg font-semibold text-brand-charcoal">{title}</span>
-      <span className="mt-0.5 block text-sm text-brand-charcoal/55">{sub}</span>
+      <span className="block font-display text-lg font-semibold text-brand-charcoal">
+        {title}
+      </span>
+
+      <span className="mt-0.5 block text-sm text-brand-charcoal/55">
+        {sub}
+      </span>
     </button>
   );
-}
+};
