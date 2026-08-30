@@ -353,7 +353,8 @@ export default function PostBuilder() {
           Your expertise deserves the spotlight.
         </h1>
         <p className="mt-5 text-lg leading-relaxed text-brand-charcoal/70">
-          Input your raw thoughts. Nara asks the critical questions you might overlook, structuring your insights into high-impact posts written in your authentic voice. No fluff, no fabrication—just your actual experience, amplified.
+          Input your raw thoughts.</br>
+          Nara asks the critical questions you might overlook, structuring your insights into high-impact posts written in your authentic voice.
         </p>
         <div className="mt-10 space-y-3">
           <input
