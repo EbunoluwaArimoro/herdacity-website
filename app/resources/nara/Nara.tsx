@@ -74,6 +74,16 @@ const Back = ({
   </button>
 );
 
+const [session] = useState(() => Math.random().toString(36).slice(2, 12));
+
+const track = (event: string, props: Record<string, unknown> = {}) => {
+  void fetch("/api/nara/track", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ event, props, session }),
+  }).catch(() => {});
+};
+
 export default function PostBuilder() {
   const [mounted, setMounted] = useState(false);
   const [store, setStore] = useState<Store>(emptyStore());
@@ -1096,3 +1106,4 @@ const DoorButton = ({
     </button>
   );
 };
+

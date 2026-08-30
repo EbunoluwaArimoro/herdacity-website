@@ -1,21 +1,31 @@
 import { NextResponse } from "next/server";
 import { callGroq, parseJson, FAST_MODELS } from "@/lib/nara/groq";
 import { anglesForPrompt } from "@/lib/nara/angles";
+import { trackAsync } from "@/lib/nara/analytics";
+import { clamp, MAX_MOMENT } from "@/lib/nara/limit";
 
 export const runtime = "nodejs";
-export const maxDuration = 30;
+export const maxDuration = 45;
 
 type Option = { angleId: string; label: string; questions: string[] };
 
 export async function POST(request: Request) {
-  try {
-    const { moment, what, mode } = await request.json();
+  const started = Date.now();
+  let session: string | undefined;
 
-    if (!moment || typeof moment !== "string" || moment.trim().length < 3) {
+  try {
+    const body = await request.json();
+    session = typeof body.session === "string" ? body.session : undefined;
+
+    const moment = clamp(body.moment, MAX_MOMENT);
+    const what = clamp(body.what, 300);
+    const isReaction = body.mode === "reaction";
+
+    if (moment.length < 3) {
       return NextResponse.json({ error: "Tell me a little more first." }, { status: 400 });
     }
 
-    const isReaction = mode === "reaction";
+    trackAsync("angles_requested", { mode: isReaction ? "reaction" : "moment", momentLength: moment.length }, session);
 
     const system = `You help a professional woman turn something that happened to her into a LinkedIn post.
 
@@ -38,7 +48,7 @@ Return JSON only, in exactly this shape:
     const user = `What she does: ${what || "not given"}
 
 What she captured:
-${moment.trim()}`;
+${moment}`;
 
     const raw = await callGroq(
       [
@@ -60,12 +70,24 @@ ${moment.trim()}`;
       }));
 
     if (!options.length) {
-      return NextResponse.json({ error: "That did not give me enough to work with. Add a line more." }, { status: 422 });
+      trackAsync("angles_empty", {}, session);
+      return NextResponse.json(
+        { error: "That did not give me enough to work with. Add a line more." },
+        { status: 422 }
+      );
     }
+
+    // Which angles the model offers, so we can compare against which get picked.
+    trackAsync(
+      "angles_returned",
+      { offered: options.map((o) => o.angleId).join(","), count: options.length, ms: Date.now() - started },
+      session
+    );
 
     return NextResponse.json({ options });
   } catch (err) {
     console.error("[nara/angles]", err);
+    trackAsync("angles_failed", { reason: String(err).slice(0, 200) }, session);
     return NextResponse.json(
       { error: "Something went wrong on our side. Try again in a moment." },
       { status: 500 }
