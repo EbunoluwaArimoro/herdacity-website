@@ -7,8 +7,12 @@ import FloatingNara from "@/components/ui/FloatingNara";
 export const metadata: Metadata = {
   title: "HERdacity | A Sisterhood for Women Who Dare",
   description: "A leadership ecosystem and professional growth community for ambitious women.",
-  // THIS IS THE FIX: Pointing to the dark icon instead of the white one
-  icons: { icon: "/icon.png" }, 
+  icons: {
+    icon: [
+      { url: "/icon.png", media: "(prefers-color-scheme: light)" },
+      { url: "/icon-white.png", media: "(prefers-color-scheme: dark)" },
+    ],
+  }, 
   
   // 1. Social Media Sharing (Open Graph)
   openGraph: {
