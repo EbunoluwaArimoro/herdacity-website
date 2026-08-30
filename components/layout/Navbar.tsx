@@ -12,7 +12,6 @@ const navLinks = [
   { label: "Programs", href: "/programs" },
   { label: "Events", href: "/events" },
   { label: "Voices", href: "/voices" },
-  { label: "Use Nara", href: "/resources/nara" },
 ];
 
 export default function Navbar() {
