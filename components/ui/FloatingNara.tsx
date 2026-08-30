@@ -68,9 +68,6 @@ export default function FloatingNara() {
               <span className="font-display text-sm font-bold tracking-tight md:text-base">
                 Use Nara
               </span>
-                <span className="text-xs font-medium tracking-tight md:text-sm">
-                    Build your post with AI
-                </span>
             </span>
           </Link>
 
