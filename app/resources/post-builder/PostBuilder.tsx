@@ -347,19 +347,18 @@ export default function PostBuilder() {
     return (
       <Shell>
         <p className="font-display text-sm font-semibold uppercase tracking-[0.2em] text-brand-pink">
-          The HERdacity Network
+          Nara by The HERdacity Network
         </p>
         <h1 className="mt-3 font-display text-4xl font-bold leading-tight text-brand-charcoal sm:text-5xl">
-          You already have something to say.
+          Your expertise deserves the spotlight.
         </h1>
         <p className="mt-5 text-lg leading-relaxed text-brand-charcoal/70">
-          Tell it what happened. It asks you the questions you would have left out, then writes the post in
-          your voice. It never makes anything up, and it never writes a post you did not live.
+          Input your raw thoughts. Nara asks the critical questions you might overlook, structuring your insights into high-impact posts written in your authentic voice. No fluff, no fabrication—just your actual experience, amplified.
         </p>
         <div className="mt-10 space-y-3">
           <input
             className={field}
-            placeholder="Your first name"
+            placeholder="Your name"
             value={firstName}
             onChange={(e) => setFirstName(e.target.value)}
           />
@@ -367,16 +366,16 @@ export default function PostBuilder() {
             className={field}
             type="email"
             inputMode="email"
-            placeholder="Your email"
+            placeholder="Your email address"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <button className={primary} onClick={submitEmail} disabled={busy}>
-            {busy ? "One moment" : "Let me in"}
+            {busy ? "One moment" : "Access Nara"}
           </button>
           <Err />
           <p className="pt-2 text-center text-xs leading-relaxed text-brand-charcoal/50">
-            Your email joins the HERdacity list. Everything you write in here stays on your own device and
+            Everything you write in here stays on your own device and
             never reaches us.
           </p>
         </div>
