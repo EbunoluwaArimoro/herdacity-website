@@ -48,7 +48,7 @@ export default function ResourcesPage() {
             >
               <div className="h-[1px] w-8 bg-brand-pink md:w-12" />
               <span className="text-[10px] font-bold uppercase tracking-[0.3em] text-brand-pink md:text-xs">
-                Open now
+                Now Live
               </span>
             </motion.div>
 
