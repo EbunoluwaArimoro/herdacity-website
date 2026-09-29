@@ -131,17 +131,16 @@ const allEvents = [
     status: "Open",
     link: "https://luma.com/xzklxmsj"
   },
-  {
+    {
     id: "dec-2026",
-    sortDate: "2026-12-12",
-    displayDate: "Dec 12",
-    title: "Becoming Her 26",
-    description: "The Unveiling: Celebrating the Woman You Evolved Into.",
-    status: "Waitlist",
-    link: "https://luma.com/o4t8x60x"
+    sortDate: "2026-12-05",
+    displayDate: "Dec 5",
+    title: "Becoming HER 2026",
+    description: "Our annual gathering. A day of reflection, honest conversation, connection and intention.",
+    status: "Open",
+    link: "/becoming-her"
   }
 ];
-
 export default function EventAgenda() {
   // 1. Filter out past events
   // 2. Automatically derive the category based on content
