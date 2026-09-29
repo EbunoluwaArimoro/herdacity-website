@@ -6,10 +6,10 @@ import type { ReactNode } from "react";
 const REGISTER_URL = "https://luma.com/ikndpol6";
 
 const details = [
-  { label: "Date", value: "Saturday 5 December 2026" },
-  { label: "Time", value: "10:00 to 16:00, doors open at 09:30" },
-  { label: "Venue", value: "Café One, Oregun, Ikeja, Lagos" },
-  { label: "Ticket", value: "₦25,000, one hundred seats only" },
+  { label: "Date", value: "Saturday 5 December 2026", note: "" },
+  { label: "Time", value: "9:00am to 4:00pm", note: "" },
+  { label: "Venue", value: "Café One, Oregun, Ikeja, Lagos", note: "" },
+  { label: "Ticket", value: "₦25,000", note: "One hundred seats only" },
 ];
 
 const dayHolds = [
@@ -39,6 +39,7 @@ const steps = [
   {
     title: "Register on Luma",
     desc: "It takes less than a minute, and your seat is reserved as soon as you do.",
+    href: REGISTER_URL,
   },
   {
     title: "Make your transfer",
@@ -162,6 +163,9 @@ export default function BecomingHer() {
                   {d.label}
                 </span>
                 <p className="text-lg font-bold text-brand-charcoal leading-snug">{d.value}</p>
+                {d.note && (
+                  <p className="mt-2 text-xs italic text-brand-charcoal/50">{d.note}</p>
+                )}
               </motion.div>
             ))}
           </div>
@@ -176,6 +180,9 @@ export default function BecomingHer() {
               What the Day Holds
             </h2>
             <div className="w-16 h-1 bg-brand-charcoal/10 mx-auto rounded-full"></div>
+            <p className="mt-4 text-xs italic text-brand-charcoal/50">
+              Speakers will be announced in the coming weeks.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -208,9 +215,6 @@ export default function BecomingHer() {
             ))}
           </div>
 
-          <p className="text-center mt-12 text-brand-charcoal/60 font-light">
-            Speakers will be announced in the coming weeks.
-          </p>
         </div>
       </section>
 
@@ -256,6 +260,9 @@ export default function BecomingHer() {
               <h2 className="text-4xl md:text-6xl font-display font-bold text-brand-charcoal leading-[1.1]">
                 Secure your <span className="text-brand-pink italic font-serif">seat.</span>
               </h2>
+              <p className="mt-4 text-xs italic text-brand-charcoal/50">
+                Registration closes on Wednesday 2 December.
+              </p>
             </div>
 
             <div className="grid md:grid-cols-3 gap-6">
@@ -271,15 +278,23 @@ export default function BecomingHer() {
                   <span className="flex w-12 h-12 items-center justify-center rounded-full bg-brand-pink text-white font-display font-bold text-lg mb-6">
                     {i + 1}
                   </span>
-                  <h3 className="text-xl font-bold text-brand-charcoal mb-3">{step.title}</h3>
+                  {"href" in step && step.href ? (
+                    <a
+                      href={step.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group inline-flex items-center text-xl font-bold text-brand-pink mb-3 underline underline-offset-4 decoration-brand-pink/30 hover:decoration-brand-pink transition-colors"
+                    >
+                      {step.title}
+                      <span className="ml-2 transition-transform group-hover:translate-x-1">→</span>
+                    </a>
+                  ) : (
+                    <h3 className="text-xl font-bold text-brand-charcoal mb-3">{step.title}</h3>
+                  )}
                   <p className="text-brand-charcoal/70 text-sm leading-relaxed">{step.desc}</p>
                 </motion.div>
               ))}
             </div>
-
-            <p className="mt-10 text-brand-charcoal/60 font-light">
-              Registration closes on Wednesday 2 December. There are no sales at the door.
-            </p>
           </div>
         </div>
       </section>
