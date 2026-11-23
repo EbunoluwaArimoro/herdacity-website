@@ -103,3 +103,7 @@ If you'd like a contribution checklist or commit hooks (`husky`, `lint-staged`),
 No license is included in this repository. If you want this project to be open source, add a `LICENSE` file (for example, MIT).
 
 ---
+
+## By Design board (Becoming HER 2026)
+
+The vision board app lives in `public/bydesign/` and is served at herdacity.com/bydesign (see the rewrites in `next.config.ts`). It is a self-contained static app: everything a guest types and uploads stays on her phone. Email opt-ins go to `app/api/subscribe` with `source: "bydesign"`, which tags them "Becoming HER 2026" in Kit. Words, affirmations, looks and backgrounds can be edited in `public/bydesign/looks.js`.
