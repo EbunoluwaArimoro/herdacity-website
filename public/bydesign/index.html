@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<base href="/bydesign/">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2B2D20">
+<title>By Design · Becoming HER 2026</title>
+<link rel="stylesheet" href="fonts.css">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="inapp" class="banner" hidden>
+  <p>This page can't save photos inside this app. Open it in your phone's browser (Chrome or Safari).</p>
+  <button id="copylink" class="btn small">Copy link</button>
+</div>
+
+<header class="top">
+  <button id="back" class="iconbtn" aria-label="Back" hidden>&larr;</button>
+  <div class="brand"><span class="dot"></span>By Design</div>
+  <div id="steps" class="steps" aria-hidden="true"></div>
+</header>
+
+<main id="app">
+
+<section class="screen" id="s-welcome" data-step="0">
+  <p class="kicker">Becoming HER 2026 · By Design</p>
+  <h1>Let's turn your plan into a board you'll see every day.</h1>
+  <p class="help">Everything you type stays on your phone.</p>
+  <label class="field">First name
+    <input id="f-name" maxlength="30" autocomplete="given-name" placeholder="Your first name">
+  </label>
+  <button class="btn primary next">Start</button>
+  <button class="btn ghost" id="fresh" hidden>Start again with a clean page</button>
+</section>
+
+<section class="screen" id="s-word" data-step="1">
+  <p class="kicker">Your word for 2027</p>
+  <h2>One word for what you want 2027 to be.</h2>
+  <p class="help">It goes at the heart of your board, with 2027 under it.</p>
+  <label class="field"><span class="sr">Your word</span>
+    <input id="f-word" maxlength="14" autocapitalize="words" placeholder="e.g. Abundance">
+    <span class="count" data-for="f-word"></span>
+  </label>
+  <canvas id="word-preview" class="wordprev" width="900" height="300" aria-hidden="true"></canvas>
+  <button class="btn primary next">Next</button>
+</section>
+
+<section class="screen" id="s-wish" data-step="2">
+  <p class="kicker">Wish</p>
+  <h2>What do you most want to make happen in 2027?</h2>
+  <p class="help">One sentence.</p>
+  <label class="field"><span class="sr">Your wish</span><textarea id="f-wish" maxlength="90" rows="3"></textarea><span class="count" data-for="f-wish"></span></label>
+  <button class="btn primary next">Next</button>
+</section>
+
+<section class="screen" id="s-outcome" data-step="3">
+  <p class="kicker">Outcome</p>
+  <h2>If it happens, what's the best thing that changes for you?</h2>
+  <label class="field"><span class="sr">Your outcome</span><textarea id="f-outcome" maxlength="90" rows="3"></textarea><span class="count" data-for="f-outcome"></span></label>
+  <button class="btn primary next">Next</button>
+</section>
+
+<section class="screen" id="s-obstacle" data-step="4">
+  <p class="kicker">Obstacle</p>
+  <h2>What habit or fear inside you is most likely to get in the way?</h2>
+  <p class="help">This shapes your plan. It isn't printed on your board unless you choose to show it.</p>
+  <label class="field"><span class="sr">Your obstacle</span><textarea id="f-obstacle" maxlength="60" rows="2"></textarea><span class="count" data-for="f-obstacle"></span></label>
+  <button class="btn primary next">Next</button>
+</section>
+
+<section class="screen" id="s-plan" data-step="5">
+  <p class="kicker">Plan</p>
+  <h2>Your if-then plan for that obstacle.</h2>
+  <label class="field">If
+    <textarea id="f-if" maxlength="60" rows="2"></textarea><span class="count" data-for="f-if"></span>
+  </label>
+  <label class="field">then I will
+    <textarea id="f-then" maxlength="70" rows="2"></textarea><span class="count" data-for="f-then"></span>
+  </label>
+  <button class="btn primary next">Next</button>
+</section>
+
+<section class="screen" id="s-areas" data-step="6">
+  <p class="kicker">Your year in pictures</p>
+  <h2>Which parts of your life is 2027 about?</h2>
+  <p class="help">Pick 1 to 4. If you pick just one or two, we'll add a few close photos so your board still feels full.</p>
+  <div id="area-tiles" class="tiles"></div>
+  <button class="btn primary next" id="areas-next" disabled>Next</button>
+</section>
+
+<section class="screen" id="s-trad" data-step="6">
+  <p class="kicker">Make it yours</p>
+  <div id="trad-love" hidden>
+    <h2>Which wedding do you see for yourself?</h2>
+    <p class="help">Pick all that fit.</p>
+    <div class="chips" data-group="love"></div>
+  </div>
+  <div id="trad-faith" hidden>
+    <h2>Which feels like you?</h2>
+    <div class="chips" data-group="faith"></div>
+  </div>
+  <p class="help small">Your answer stays on your phone. It's only used to choose your photos.</p>
+  <button class="btn primary next">Next</button>
+</section>
+
+<section class="screen" id="s-pick" data-step="7">
+  <p class="kicker" id="pick-kicker">Choose your photos</p>
+  <h2 id="pick-title">Tap the photos you love</h2>
+  <p class="help">Or let us choose. You can also add up to 3 of your own.</p>
+  <div class="pickbar"><span id="pick-count">0 picked</span><button class="btn small ghost" id="pick-auto">Choose for me</button></div>
+  <div id="pick-grid" class="grid"></div>
+  <input type="file" id="upload" accept="image/*" multiple hidden>
+  <button class="btn primary" id="pick-next">Next</button>
+</section>
+
+<section class="screen" id="s-feel" data-step="8">
+  <p class="kicker">How you want to feel</p>
+  <h2>Which words do you want to live in 2027?</h2>
+  <p class="help">Pick 3 to 6. They go on your board in their own styles. If you pick fewer than 4, we'll add ones that match your themes.</p>
+  <div id="feel-chips" class="chips"></div>
+  <label class="field">Add your own word<input id="feel-own" maxlength="16" placeholder="e.g. Ìtẹ́lọ́rùn"></label>
+  <button class="btn small" id="feel-add">Add</button>
+  <button class="btn primary next" id="feel-next">Next</button>
+</section>
+
+<section class="screen" id="s-affirm" data-step="8">
+  <p class="kicker">Your affirmations</p>
+  <h2>What do you want to tell yourself every time you pick up your phone?</h2>
+  <p class="help">Pick 1 to 4, or write your own. If you pick just one, we'll add one that matches your themes.</p>
+  <div id="aff-chips" class="chips aff"></div>
+  <label class="field">Write your own<input id="aff-own" maxlength="60" placeholder="e.g. I am the one they call"></label>
+  <button class="btn small" id="aff-add">Add</button>
+  <button class="btn primary next" id="aff-next">Next</button>
+</section>
+
+<section class="screen" id="s-look" data-step="8">
+  <p class="kicker">Your look</p>
+  <h2>Which of these feels like you?</h2>
+  <div id="look-tiles" class="looks"></div>
+  <button class="btn ghost" id="look-unsure">Not sure? Start with Harvest</button>
+</section>
+
+<section class="screen" id="s-boards" data-step="9">
+  <p class="kicker">Your boards</p>
+  <h2>Tap the one you love most.</h2>
+  <div id="board-choices" class="boards"></div>
+</section>
+
+<section class="screen" id="s-refine" data-step="10">
+  <p class="kicker">Make it perfect</p>
+  <p class="help small">Tap any photo to swap it.</p>
+  <div class="refinewrap"><canvas id="refine-canvas" class="board"></canvas><div id="refine-busy" class="busy" hidden>Composing…</div></div>
+  <div class="controls">
+    <button class="ctl" data-act="photos">Shuffle photos</button>
+    <button class="ctl" data-act="words">Restyle words</button>
+    <button class="ctl" data-act="colours">Colours</button>
+    <button class="ctl" data-act="layout">Layout</button>
+    <button class="ctl" data-act="look">Change look</button>
+    <button class="ctl" data-act="background">Background</button>
+    <button class="ctl" data-act="undo">Undo</button>
+  </div>
+  <button class="btn primary" id="to-save">I love it</button>
+</section>
+
+<section class="screen" id="s-save" data-step="11">
+  <p class="kicker">Save</p>
+  <h2>Save your board and set it as your lock screen.</h2>
+  <button class="btn primary" id="save-phone">Save lock screen</button>
+  <button class="btn" id="save-laptop">Save laptop wallpaper</button>
+  <details class="how" id="how-ios"><summary>How to set it on iPhone</summary>
+    <ol><li>Tap <b>Save Image</b> (or press and hold the board, then <b>Save to Photos</b>).</li><li>Open <b>Photos</b>, open your board, tap the share icon, then <b>Use as Wallpaper</b>.</li><li>Pinch to fit, turn off <b>Perspective Zoom</b> or depth effect, then tap <b>Set as Lock Screen</b>.</li></ol></details>
+  <details class="how" id="how-android"><summary>How to set it on Android</summary>
+    <ol><li>Tap <b>Save</b>. The board goes to your Gallery or Downloads.</li><li>Open it in <b>Gallery</b>, tap the three dots, then <b>Set as wallpaper</b>.</li><li>Choose <b>Lock screen</b>.</li></ol></details>
+  <button class="btn ghost next">Next</button>
+</section>
+
+<section class="screen" id="s-stay" data-step="12">
+  <p class="kicker">Stay with it</p>
+  <h2>Want a little nudge through 2027?</h2>
+  <label class="check"><input type="checkbox" id="optin"> Tick this if you'd like HERdacity to email you four short check-ins in 2027 and remind you to open your envelope on Monday 1st March. We will only use your email for this, we will never share it with partners or anyone else, and you can unsubscribe at any time.</label>
+  <label class="field" id="email-field" hidden>Email address<input id="f-email" type="email" autocomplete="email" inputmode="email"></label>
+  <button class="btn primary" id="done">Done</button>
+  <p id="thanks" class="thanks" hidden>Your board is yours. See you in March. 💗</p>
+</section>
+
+</main>
+
+<div id="sheet" class="sheet" hidden>
+  <div class="sheet-inner">
+    <div class="sheet-head"><b id="sheet-title">Swap this photo</b><button class="iconbtn" id="sheet-close" aria-label="Close">&times;</button></div>
+    <div id="sheet-grid" class="grid"></div>
+  </div>
+</div>
+
+<div id="saved" class="saved" hidden>
+  <div class="saved-inner">
+    <p class="help">Press and hold the board, then choose <b>Save to Photos</b> or <b>Download image</b>.</p>
+    <img id="saved-img" alt="Your By Design board">
+    <a id="saved-dl" class="btn primary" download="by-design-2027.png">Download</a>
+    <button class="btn ghost" id="saved-close">Close</button>
+  </div>
+</div>
+
+<script src="config.js"></script>
+<script src="looks.js"></script>
+<script src="art.js"></script>
+<script src="engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

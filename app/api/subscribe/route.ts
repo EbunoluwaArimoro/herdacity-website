@@ -3,7 +3,7 @@ import { NextResponse } from 'next/server';
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, firstName, lastName, phone, linkedin, jobTitle, company } = body;
+    const { email, firstName, lastName, phone, linkedin, jobTitle, company, source } = body;
 
     if (!email) {
       return NextResponse.json({ error: 'Email is required' }, { status: 400 });
@@ -13,7 +13,9 @@ export async function POST(request: Request) {
     const FORM_ID = process.env.NEXT_PUBLIC_CONVERTKIT_FORM_ID;
     
     // Tag ID from your URL (likely "Community Members" or the new tag you created)
-    const TAG_ID = "14338360"; 
+    // Opt-ins from the By Design board (herdacity.com/bydesign) get the "Becoming HER 2026" tag instead.
+    const TAGS: Record<string, string> = { bydesign: "26337896" };
+    const TAG_ID = (typeof source === "string" && TAGS[source]) || "14338360";
 
     const API_URL = `https://api.convertkit.com/v3/forms/${FORM_ID}/subscribe`;
 
